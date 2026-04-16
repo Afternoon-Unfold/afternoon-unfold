@@ -1,0 +1,33 @@
+# Old versions
+afternoon-unfold-v1.html
+afternoon-unfold-v2.html
+afternoon-unfold-v3.html
+afternoon-unfold-v4.html
+afternoon-unfold-v5.html
+afternoon-unfold-v6.html
+afternoon-unfold-v7.html
+afternoon-unfold-v8.html
+afternoon-unfold-v9.html
+afternoon-unfold-v10.html
+
+# Zip files and temp folders
+*.zip
+chanpin_imgs/
+product_images_extracted/
+claude_pics_temp/
+产品氛围图/
+产品氛围图_extracted/
+atm_imgs/
+product/
+product\ png/
+白底水墨product/
+
+# Other files
+*.xlsx
+*.pdf
+logo\ 2.png
+sy-atmo2.jpg
+sy-atmo3.jpg
+sy-atmo4.jpg
+sy-atmo5.jpg
+product\ in\ motion\ video.zip
