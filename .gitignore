@@ -9,6 +9,13 @@ afternoon-unfold-v7.html
 afternoon-unfold-v8.html
 afternoon-unfold-v9.html
 afternoon-unfold-v10.html
+afternoon-unfold-v11.html
+afternoon-unfold-v12.html
+
+# System + editor
+.DS_Store
+.claude/
+Gemini_sand.png
 
 # Zip files and temp folders
 *.zip
