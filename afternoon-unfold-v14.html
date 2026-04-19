@@ -1036,8 +1036,6 @@ body.overlay-active #main-nav{top:0;}
 #reserved-page .rp-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:0.5rem;}
 #reserved-page .rp-back-btn{background:linear-gradient(90deg,#8E3A4E 0%,#B94F63 100%);color:#FDF8F5;font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;padding:14px 32px;border:none;border-radius:999px;cursor:pointer;transition:all 0.22s ease;box-shadow:0 4px 14px -4px rgba(185,79,99,0.4);}
 #reserved-page .rp-back-btn:hover{background:linear-gradient(90deg,#7A2E42 0%,#A0384F 100%);box-shadow:0 8px 22px -6px rgba(185,79,99,0.55);transform:translateY(-1px);}
-#reserved-page .rp-share-btn{background:transparent;color:var(--ink);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;padding:14px 24px;border:1px solid var(--border);border-radius:999px;cursor:pointer;transition:all 0.2s;}
-#reserved-page .rp-share-btn:hover{border-color:#B94F63;color:#B94F63;}
 
 /* Pre-sale inactive / sold-out state */
 .ps-inactive-msg{text-align:center;padding:1.5rem 1rem;}
@@ -1474,9 +1472,8 @@ function submitWelcomeNotify(form){
   <div class="faq-wrap" id="faq-wrap" style="max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height 0.45s ease,opacity 0.35s ease,margin-top 0.3s ease;">
     <div class="faq-item open"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">How long does delivery take?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">We're in our Round 1 reservation stage — our Founding 50 boxes ship July 4, 2026, US only. Once shipping opens, please allow 5–10 business days from dispatch.</div></div></div>
     <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">Are the blind boxes suitable for complete beginners?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Absolutely. Every blind box includes a printed step-by-step guide plus QR code video tutorials. No prior experience needed.</div></div></div>
-    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What is the mystery add-on?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Every blind box includes a hand-picked extra based on your answers and the scene you're creating — hand cream, dried florals, a mini candle. Always a surprise until you open the box.</div></div></div>
-    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">Can I send a blind box as a gift?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Yes. Every blind box arrives in a beautiful presentation box. You can add a handwritten note and ship directly to the recipient.</div></div></div>
-    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What is your return policy?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">100% happiness guarantee. If you're not happy for any reason, reach out within 30 days — replacement, refund, or store credit, your choice.</div></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What is the mystery add-on?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Every blind box includes a hand-picked extra based on your answers and the scene you're creating. Always a surprise until you open the box.</div></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">Can I send a blind box as a gift?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Yes. Every blind box arrives in a beautiful presentation box. You can leave a handwritten note while placing your order.</div></div></div>
   </div>
   </div>
 </div>
@@ -2069,7 +2066,6 @@ function submitPromo(e,variant){
     <p class="rp-social">✦ Follow us on <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener">Instagram</a> / <a href="https://www.tiktok.com/@afternoonunfold" target="_blank" rel="noopener">TikTok</a> for behind-the-scenes as we pack the Founding 50.</p>
     <div class="rp-actions">
       <button class="rp-back-btn" type="button" onclick="closeReservedPage()">← Back to main page</button>
-      <button class="rp-share-btn" type="button" onclick="shareReservation()">Share ✦</button>
     </div>
   </div>
 </div>
@@ -2542,8 +2538,15 @@ function buildResult(){
   // TODO: replace the URL below with your actual payment/checkout link
   btn.onclick=function(){ openReserveModal(); };
 
-  // Re-init eraser canvases once content has rendered
+  // Re-init eraser canvases once content has rendered.
+  // Run once immediately (aspect-ratio gives us layout), then again when each
+  // image actually loads — catches cases where the first paint is off.
   setTimeout(function(){ initErasers(); },60);
+  imgWrap.querySelectorAll('img').forEach(function(img){
+    if(img.complete && img.naturalWidth>0) return;
+    img.addEventListener('load', function(){ initErasers(); }, {once:true});
+    img.addEventListener('error', function(){ initErasers(); }, {once:true});
+  });
 }
 
 /* ════════════════════════════════════════════════
@@ -2859,21 +2862,6 @@ function closeReservedPage(){
   document.body.classList.remove('overlay-active');
   document.body.style.overflow = '';
   window.scrollTo({top:0,behavior:'smooth'});
-}
-function shareReservation(){
-  var txt = "Just reserved my Afternoon Unfold DIY Craft Blind Box — one of only 50 in Round 1 ✦ afternoon-unfold.com";
-  var url = "https://afternoon-unfold.com";
-  if(navigator.share){
-    navigator.share({title:'Afternoon Unfold · Founding 50', text:txt, url:url}).catch(function(){});
-  } else {
-    try {
-      navigator.clipboard.writeText(txt + ' ' + url);
-      var btn = document.querySelector('.rp-share-btn');
-      if(btn){ var old = btn.textContent; btn.textContent = '✦ Copied!'; setTimeout(function(){btn.textContent=old;},1800); }
-    } catch(e){
-      alert('Copy this: ' + txt + ' ' + url);
-    }
-  }
 }
 
 function submitWaitlist(form){
