@@ -1276,7 +1276,7 @@ function submitWelcomeNotify(form){
     method:'POST',
     headers:{'Accept':'application/json','Content-Type':'application/json'},
     body:JSON.stringify({
-      _subject: '📮 Round 1 early-waitlist — ' + email,
+      _subject: 'Round 1 early-waitlist - ' + email,
       _replyto: email,
       email: email,
       source: 'welcome-popup-notify',
@@ -1613,7 +1613,7 @@ function submitPromo(e,variant){
   var submitBtn=form.querySelector('.promo-submit');
   submitBtn.textContent='Sending…'; submitBtn.disabled=true;
   var data={
-    _subject:'📬 New 15% off subscriber — '+email,
+    _subject:'New 15% off subscriber - '+email,
     source:'promo-popup-'+variant,
     email:email,
     preference:pref,
@@ -2011,6 +2011,8 @@ function submitPromo(e,variant){
       </div>
 
       <form id="reserve-presale-form" onsubmit="event.preventDefault();proceedToCheckout();return false;">
+        <!-- Honeypot field: bots fill this, humans don't see it. Formspree recognizes `_gotcha` and auto-rejects. -->
+        <input type="text" name="_gotcha" style="display:none !important;position:absolute;left:-9999px;" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label class="reserve-label" for="rsv-email">Email <span style="color:#B94F63;">*</span></label>
         <input type="email" id="rsv-email" required placeholder="you@example.com" autocomplete="email" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:13px;color:var(--ink);margin-bottom:10px;outline:none;transition:border-color 0.2s;">
 
@@ -2882,7 +2884,7 @@ function submitWaitlist(form){
     method:'POST',
     headers:{'Accept':'application/json','Content-Type':'application/json'},
     body: JSON.stringify({
-      _subject: '📮 Waitlist signup — ' + email,
+      _subject: 'Waitlist signup - ' + email,
       email: email,
       source: 'waitlist-modal-' + getPreSaleState(),
       message: 'Waitlist email from pre-sale ' + getPreSaleState() + ' state: ' + email
@@ -2929,6 +2931,13 @@ function proceedToCheckout(){
   var zip = (zipInput.value||'').trim();
   var notes = (notesInput && notesInput.value)||'';
 
+  /* Honeypot: if a bot fills the hidden _gotcha field, silently "succeed" (don't submit) */
+  var honeypot = formEl.querySelector('input[name="_gotcha"]');
+  if(honeypot && honeypot.value){
+    console.log('Bot blocked via honeypot');
+    return;
+  }
+
   /* Basic validation */
   if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
     emailInput.focus(); emailInput.style.borderColor='#B94F63';
@@ -2939,19 +2948,19 @@ function proceedToCheckout(){
 
   /* Soft US detection — 5-digit zip */
   var isUS = /^\d{5}(-\d{4})?$/.test(zip);
-  var subjPrefix = isUS ? '📝 Founding 50 reservation' : '🌍 Founding 50 international interest';
+  var subjPrefix = isUS ? 'Founding 50 reservation' : 'Founding 50 international interest';
 
   /* Box number assignment (provisional — you manually finalize when packing) */
   var assignedBox = PRE_SALE_RESERVED + 1;   // visually optimistic; you update PRE_SALE_RESERVED daily
 
-  /* Build readable message */
+  /* Build readable message — plain text, no fancy characters (spam-filter friendly) */
   var msg = [
-    '═══ FOUNDING 50 RESERVATION ═══',
-    'Box: #' + assignedBox + ' of ' + PRE_SALE_TOTAL + ' (provisional)',
+    'FOUNDING 50 RESERVATION',
     '',
+    'Box: #' + assignedBox + ' of ' + PRE_SALE_TOTAL + ' (provisional)',
     'Customer: ' + firstName,
     'Email: ' + email,
-    'Zip: ' + zip + (isUS ? ' (US)' : ' (international — needs manual follow-up)'),
+    'Zip: ' + zip + (isUS ? ' (US)' : ' (international - needs manual follow-up)'),
     '',
     'Bundle: ' + o.sceneLabel,
     'Crafts: ' + o.selectionsText,
@@ -2963,21 +2972,22 @@ function proceedToCheckout(){
     'Retail: $' + o.retailPrice,
     'Pre-sale price (UNFOLD15 applied): $' + o.preSalePrice,
     '',
-    '── Customer quiz notes ──',
+    'Customer quiz notes:',
     (o.quizNotes || '(none)'),
     '',
-    '── Customer reservation notes ──',
+    'Customer reservation notes:',
     (notes || '(none)'),
     '',
     'Next steps:',
-    '1. Increment PRE_SALE_RESERVED in v14 JS so scarcity counter updates',
-    '2. Send confirmation email (optional) with box number + 15% code promise',
+    '1. Increment PRE_SALE_RESERVED_BASE in v14 so scarcity counter updates',
+    '2. Reply to this email with welcome + 15% code promise',
     '3. On July 4 launch: email customer a Stripe Payment Link for $' + o.preSalePrice + ' with UNFOLD15 discount'
   ].join('\n');
 
   var data = {
-    _subject: subjPrefix + ' — Box #' + assignedBox + ' — ' + firstName,
+    _subject: subjPrefix + ' - Box ' + assignedBox + ' - ' + firstName,
     _replyto: email,
+    _gotcha: '',   /* honeypot field, empty = human */
     message: msg,
     box_number: assignedBox,
     email: email,
