@@ -958,7 +958,7 @@ footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.
 .prize-float{position:fixed;right:22px;bottom:22px;z-index:320;width:72px;height:72px;border-radius:50%;background:rgba(245,235,228,0.72);border:1px solid rgba(185,79,99,0.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink);user-select:none;font-family:'Raleway',sans-serif;transition:transform 0.25s ease,background 0.25s ease,box-shadow 0.25s ease,border-color 0.25s ease;box-shadow:0 6px 18px -8px rgba(20,14,8,0.18);}
 .prize-float:hover,
 .prize-float:focus-visible{background:rgba(253,248,245,0.95);transform:scale(1.06);box-shadow:0 12px 28px -10px rgba(20,14,8,0.28);border-color:#B94F63;outline:none;}
-.prize-float .pf-star{font-size:11px;color:#B94F63;line-height:1;margin-bottom:3px;letter-spacing:0.2em;}
+.prize-float .pf-icon{width:26px;height:26px;color:#B94F63;margin-bottom:4px;display:block;}
 .prize-float .pf-label{font-family:'Cormorant',serif;font-style:normal;font-weight:600;font-size:15px;color:#B94F63;line-height:1;letter-spacing:0.02em;}
 body.overlay-active .prize-float{display:none;}
 @media (max-width:640px){
@@ -1856,10 +1856,20 @@ function submitPromo(e,variant){
 })();
 </script>
 
-<!-- Floating Founder's Prize — simple translucent round button, bottom-right.
-     Click opens the prize detail modal. -->
+<!-- Floating Founder's Prize — translucent round button with a gift-box
+     line icon in rosewood. Click opens the prize detail modal. -->
 <div class="prize-float" id="prize-float" onclick="openPrizeModal()" role="button" tabindex="0" aria-label="View Founder's Prize">
-  <span class="pf-star">✦</span>
+  <svg class="pf-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <!-- Box body -->
+    <rect x="5" y="13.5" width="22" height="15.5"/>
+    <!-- Lid (slightly wider than body) -->
+    <rect x="3.5" y="10" width="25" height="3.6"/>
+    <!-- Vertical ribbon stripe -->
+    <line x1="16" y1="13.5" x2="16" y2="29"/>
+    <!-- Bow: two loops meeting at the top center -->
+    <path d="M16 10 C 11 3.5, 7.5 7.5, 13.5 10"/>
+    <path d="M16 10 C 21 3.5, 24.5 7.5, 18.5 10"/>
+  </svg>
   <span class="pf-label">Prize</span>
 </div>
 
