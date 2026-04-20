@@ -1417,6 +1417,10 @@ function tickFlipCount(el, targetLeft, total){
 }
 
 function openWelcomePopup(){
+  /* Disabled during Round 1 pre-sale — the 15% is auto-applied via the
+     reservation flow, so a separate email-capture popup is redundant.
+     Remove this `return;` to re-enable later. */
+  return;
   /* Update live stats with flip-tick count-up */
   if(typeof PRE_SALE_RESERVED !== 'undefined'){
     var left = PRE_SALE_TOTAL - PRE_SALE_RESERVED;
@@ -1509,6 +1513,28 @@ function submitWelcomeNotify(form){
     if(quizOpen || reserveOpen) return;
     openWelcomePopup();
   }, WELCOME_DELAY_MS);
+})();
+
+/* IntersectionObserver — reliably autoplay/pause videos as they scroll into
+   view. Some browsers (esp. iOS Safari in low-power mode, and Chrome on
+   below-the-fold videos) pause <video autoplay> until the element is
+   actually visible. This guarantees they start when scrolled to. */
+(function(){
+  if(typeof IntersectionObserver === 'undefined') return;
+  var videos = document.querySelectorAll('video[autoplay]');
+  if(!videos.length) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var v = e.target;
+      if(e.isIntersecting){
+        if(v.paused){ try { var p = v.play(); if(p && p.catch) p.catch(function(){}); } catch(err){} }
+      } else {
+        // Pause off-screen videos to save CPU / bandwidth
+        if(!v.paused){ try { v.pause(); } catch(err){} }
+      }
+    });
+  }, {threshold: 0.15});
+  videos.forEach(function(v){ io.observe(v); });
 })();
 </script>
 
@@ -1768,6 +1794,9 @@ function togglePbChip(el){
 }
 
 function openPromo(){
+  /* Disabled during pre-sale — reservation flow handles all capture and
+     the 15% auto-applies. Remove this `return;` to re-enable. */
+  return;
   /* v14 — skip entirely during Round 1 window (welcome popup + reservation flow handle capture) */
   if(typeof getPreSaleState==='function'){
     var s = getPreSaleState();
