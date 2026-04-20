@@ -954,17 +954,17 @@ footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.
 /* Modal prize line */
 .reserve-prize-line{background:linear-gradient(90deg,rgba(196,147,106,0.12) 0%,rgba(185,79,99,0.08) 100%);border:1px solid rgba(196,147,106,0.3);padding:10px 14px;margin:0 0 18px;font-size:12.5px;color:#3A2E24;letter-spacing:0.01em;line-height:1.5;}
 .reserve-prize-line strong{color:#B94F63;font-weight:600;}
-/* Floating Founder's Prize — rosette + ribbon-tails SVG on the right edge.
-   On hover, the hidden copy slides in from the right so the rosette
-   always stays visible. Bottom-right on mobile. */
+/* Floating Founder's Prize — rosette (rosewood) + ribbon tails on right edge.
+   Shadow is warm neutral (drawn from the rosewood/parchment palette),
+   not gold. Hover reveals a parchment panel with the teaser copy. */
 .prize-float{position:fixed;right:18px;top:40%;transform:translateY(-50%);z-index:320;cursor:pointer;display:flex;align-items:center;gap:12px;user-select:none;font-family:'Raleway',sans-serif;}
-.prize-float .pf-rosette{width:68px;height:92px;filter:drop-shadow(0 6px 14px rgba(142,92,40,0.35)) drop-shadow(0 2px 4px rgba(142,92,40,0.25));transition:transform 0.35s cubic-bezier(0.2,0.9,0.2,1);animation:pfSway 4s ease-in-out infinite;}
+.prize-float .pf-rosette{width:68px;height:92px;filter:drop-shadow(0 8px 18px rgba(142,58,78,0.35)) drop-shadow(0 2px 5px rgba(26,18,8,0.18));transition:transform 0.35s cubic-bezier(0.2,0.9,0.2,1);animation:pfSway 4s ease-in-out infinite;}
 .prize-float .pf-svg{display:block;width:100%;height:100%;}
-.prize-float .pf-copy{background:var(--parchment);border:1px solid rgba(196,147,106,0.5);padding:8px 12px 8px 14px;box-shadow:0 8px 22px -10px rgba(142,92,40,0.4);transform:translateX(-8px);opacity:0;pointer-events:none;transition:transform 0.3s ease,opacity 0.3s ease;max-width:0;overflow:hidden;white-space:nowrap;display:flex;flex-direction:column;gap:2px;}
+.prize-float .pf-copy{background:var(--parchment);border:1px solid var(--border);padding:8px 12px 8px 14px;box-shadow:0 10px 26px -10px rgba(26,18,8,0.22);transform:translateX(-8px);opacity:0;pointer-events:none;transition:transform 0.3s ease,opacity 0.3s ease;max-width:0;overflow:hidden;white-space:nowrap;display:flex;flex-direction:column;gap:2px;}
 .prize-float:hover .pf-copy,
 .prize-float:focus-visible .pf-copy{transform:translateX(0);opacity:1;max-width:260px;}
 .prize-float:hover .pf-rosette{transform:rotate(-6deg) scale(1.05);}
-.prize-float .pf-k{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#8A6034;font-weight:700;}
+.prize-float .pf-k{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#B94F63;font-weight:700;}
 .prize-float .pf-v{font-family:'Cormorant',serif;font-style:italic;font-size:14.5px;color:var(--ink);}
 @keyframes pfSway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
 body.overlay-active .prize-float{display:none;}
@@ -975,18 +975,19 @@ body.overlay-active .prize-float{display:none;}
   .prize-float:focus-visible .pf-copy{max-width:0;opacity:0;}
 }
 
-/* Founder's Prize detail modal — sealed visual teaser with big ? */
-.prize-modal{display:none;position:fixed;inset:0;z-index:540;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(60,40,20,0.86) 0%,rgba(20,12,4,0.96) 100%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:1.5rem;animation:pmFade 0.4s ease;}
+/* Founder's Prize detail modal — brand-consistent. Parchment modal body
+   on a warm dimmed backdrop (ink-toned, no gold cast). Eyebrow and accents
+   in rosewood; thin default border (no inset double-frame). */
+.prize-modal{display:none;position:fixed;inset:0;z-index:540;align-items:center;justify-content:center;background:rgba(20,14,8,0.58);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1.5rem;animation:pmFade 0.4s ease;}
 .prize-modal.open{display:flex;}
 @keyframes pmFade{from{opacity:0;}to{opacity:1;}}
-.prize-modal-inner{background:var(--parchment);padding:2.25rem 2rem 2rem;max-width:480px;width:100%;position:relative;border:1px solid rgba(196,147,106,0.55);box-shadow:0 40px 100px -20px rgba(0,0,0,0.7),0 0 60px -20px rgba(217,165,87,0.4);text-align:center;max-height:calc(100vh - 3rem);overflow-y:auto;}
-.prize-modal-inner::before{content:'';position:absolute;top:10px;left:10px;right:10px;bottom:10px;border:1px solid rgba(196,147,106,0.3);pointer-events:none;}
+.prize-modal-inner{background:var(--parchment);padding:2.25rem 2rem 2rem;max-width:480px;width:100%;position:relative;border:1px solid var(--border);box-shadow:0 30px 80px -25px rgba(20,14,8,0.5),0 8px 20px -8px rgba(20,14,8,0.2);text-align:center;max-height:calc(100vh - 3rem);overflow-y:auto;}
 .prize-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;color:var(--dust);cursor:pointer;line-height:1;width:34px;height:34px;padding:0;font-family:'Raleway',sans-serif;z-index:5;transition:color 0.2s;}
 .prize-modal-close:hover{color:var(--ink);}
-.prize-modal-eye{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.34em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px;position:relative;}
-.prize-modal-h{font-family:'Cormorant',serif;font-size:clamp(1.6rem,3vw,2.1rem);font-weight:500;color:var(--ink);line-height:1.15;margin-bottom:10px;letter-spacing:-0.01em;position:relative;}
-.prize-modal-h em{font-style:normal;color:#B94F63;}
-.prize-modal-sub{font-size:13.5px;color:var(--dust);line-height:1.65;margin-bottom:1.4rem;position:relative;padding:0 0.5rem;}
+.prize-modal-eye{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#B94F63;font-weight:600;margin-bottom:14px;}
+.prize-modal-h{font-family:'Cormorant',serif;font-size:clamp(1.55rem,2.8vw,2rem);font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:1.25rem;letter-spacing:-0.005em;padding:0 0.25rem;}
+.prize-modal-h em{font-style:italic;color:#B94F63;}
+.prize-modal-sub{font-size:13.5px;color:var(--dust);line-height:1.65;margin-bottom:1.4rem;padding:0 0.5rem;}
 /* Blurred teaser "image" — made entirely with CSS so no asset needed */
 .prize-teaser{position:relative;width:100%;aspect-ratio:4/3;margin:0 0 1.25rem;overflow:hidden;border:1px solid rgba(196,147,106,0.35);background:linear-gradient(135deg,#B8D4A3 0%,#7FA07A 55%,#3C553A 100%);}
 .prize-teaser .pt-matcha-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:blur(5px) saturate(1.08) brightness(0.95);transform:scale(1.05);}
@@ -1174,89 +1175,59 @@ body.overlay-active #main-nav{top:0;}
 #reserved-page .rp-next li::before{content:'';position:absolute;left:4px;top:14px;width:6px;height:6px;border-radius:50%;background:#B94F63;opacity:0.5;}
 #reserved-page .rp-next li strong{color:var(--ink);font-weight:600;}
 #reserved-page .rp-next li code{background:rgba(185,79,99,0.12);padding:2px 7px;border-radius:3px;font-family:inherit;color:#8E3A4E;font-weight:600;font-size:0.92em;}
-/* Golden ticket — success-page prize card. Richer gold gradient, double
-   "foil" border, notched ticket edges (via pseudo-element cutouts),
-   slow shimmer across the surface. */
+/* Success-page prize card — web-consistent: cream parchment body,
+   rosewood accent border on the left edge + eyebrow badge, ink text,
+   subtle inner frame. No gold, no shimmer. */
 #reserved-page .rp-prize{
-  background:linear-gradient(135deg,#FFF3C4 0%,#FCD98B 30%,#E6BA58 55%,#CFA041 80%,#B8892F 100%);
-  border:1px solid #8A6034;
-  padding:1.8rem 2rem 1.6rem;
+  background:linear-gradient(180deg,var(--white) 0%,var(--parchment) 100%);
+  border:1px solid var(--border);
+  border-left:3px solid #B94F63;
+  padding:1.75rem 1.9rem 1.6rem;
   margin:0 auto 1.75rem;
   max-width:480px;
   text-align:center;
   position:relative;
-  color:#3A2508;
-  box-shadow:0 18px 38px -16px rgba(142,92,40,0.55),0 4px 12px -4px rgba(142,92,40,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
-  overflow:hidden;
-  isolation:isolate;
+  box-shadow:0 18px 40px -22px rgba(20,14,8,0.2),0 4px 12px -6px rgba(20,14,8,0.12);
 }
-/* Inner double-frame foil border */
 #reserved-page .rp-prize::before{
   content:'';
   position:absolute;top:8px;left:8px;right:8px;bottom:8px;
-  border:1px solid rgba(106,68,34,0.45);
-  box-shadow:inset 0 0 0 2px rgba(255,240,200,0.4);
+  border:1px solid rgba(185,79,99,0.15);
   pointer-events:none;
-  z-index:0;
-}
-/* Slow diagonal shimmer */
-#reserved-page .rp-prize::after{
-  content:'';
-  position:absolute;top:-50%;left:-50%;width:50%;height:200%;
-  background:linear-gradient(115deg,transparent 30%,rgba(255,255,230,0.55) 50%,transparent 70%);
-  transform:translateX(0) rotate(14deg);
-  animation:rpShimmer 5.5s ease-in-out infinite;
-  pointer-events:none;
-  z-index:1;
-}
-@keyframes rpShimmer{
-  0%,100%{transform:translateX(-40%) rotate(14deg);opacity:0.5;}
-  50%{transform:translateX(260%) rotate(14deg);opacity:0.85;}
 }
 #reserved-page .rp-prize-badge{
   display:inline-block;
   padding:5px 14px;
-  border:1px solid #6B4422;
-  color:#3A2508;
+  border:1px solid rgba(185,79,99,0.5);
+  color:#B94F63;
   font-family:'Raleway',sans-serif;
   font-size:10px;
-  letter-spacing:0.32em;
+  letter-spacing:0.28em;
   text-transform:uppercase;
-  font-weight:700;
+  font-weight:600;
   margin-bottom:14px;
-  background:rgba(255,244,205,0.8);
-  position:relative;z-index:2;
-  box-shadow:0 1px 0 rgba(255,255,255,0.6) inset;
+  background:var(--white);
+  position:relative;
 }
 #reserved-page .rp-prize-h{
   font-family:'Cormorant',serif;
-  font-size:1.55rem;
+  font-size:1.5rem;
   font-weight:500;
-  color:#3A2508;
+  color:var(--ink);
   line-height:1.3;
   margin-bottom:10px;
-  position:relative;z-index:2;
-  text-shadow:0 1px 0 rgba(255,255,255,0.4);
+  position:relative;
+  letter-spacing:-0.005em;
 }
-#reserved-page .rp-prize-h em{font-style:italic;color:#7A3A3F;}
+#reserved-page .rp-prize-h em{font-style:italic;color:#B94F63;}
 #reserved-page .rp-prize-sub{
   font-size:13.5px;
-  color:#4A3420;
+  color:var(--dust);
   line-height:1.7;
-  margin-bottom:10px;
-  position:relative;z-index:2;
-}
-#reserved-page .rp-prize-sub em{font-style:italic;color:#3A2508;}
-#reserved-page .rp-prize-sub strong{color:#3A2508;font-weight:700;}
-#reserved-page .rp-prize-fine{
-  font-size:12px;
-  color:#6B4422;
-  line-height:1.6;
   margin:0;
-  font-style:italic;
-  position:relative;z-index:2;
-  opacity:0.9;
+  position:relative;
 }
+#reserved-page .rp-prize-sub strong{color:var(--ink);font-weight:600;}
 #reserved-page .rp-social{font-size:13px;color:var(--dust);line-height:1.7;margin-bottom:2rem;}
 #reserved-page .rp-social a{color:#B94F63;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(185,79,99,0.3);}
 #reserved-page .rp-social a:hover{border-bottom-color:#B94F63;}
@@ -1898,32 +1869,34 @@ function submitPromo(e,variant){
   <div class="pf-rosette">
     <svg class="pf-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <linearGradient id="pf-gold" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#FBE8A8"/>
-          <stop offset="45%" stop-color="#E6C878"/>
-          <stop offset="100%" stop-color="#B08340"/>
+        <!-- Brand rosewood gradient, used for the rosette body -->
+        <linearGradient id="pf-rose" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#D89DA9"/>
+          <stop offset="45%" stop-color="#B94F63"/>
+          <stop offset="100%" stop-color="#8E3A4E"/>
         </linearGradient>
-        <linearGradient id="pf-gold-dark" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#D4A94A"/>
-          <stop offset="100%" stop-color="#8A6034"/>
+        <!-- Darker rosewood for the hanging ribbon tails -->
+        <linearGradient id="pf-rose-dark" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#A0384F"/>
+          <stop offset="100%" stop-color="#6B2A3B"/>
         </linearGradient>
+        <!-- Parchment/cream inner label -->
         <radialGradient id="pf-center" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stop-color="#FFF4CE"/>
-          <stop offset="100%" stop-color="#E6C878"/>
+          <stop offset="0%" stop-color="#FDF8F5"/>
+          <stop offset="100%" stop-color="#F5EBE4"/>
         </radialGradient>
       </defs>
-      <!-- Two ribbon tails hanging down, behind the rosette -->
-      <path d="M42 70 L32 150 L46 138 L52 152 L58 138 Z" fill="url(#pf-gold-dark)" stroke="#6B4422" stroke-width="0.8"/>
-      <path d="M78 70 L88 150 L74 138 L68 152 L62 138 Z" fill="url(#pf-gold-dark)" stroke="#6B4422" stroke-width="0.8"/>
-      <!-- Rosette: starburst outer + flat inner circle -->
+      <!-- Two ribbon tails (darker rosewood), hang down behind the rosette -->
+      <path d="M42 70 L32 150 L46 138 L52 152 L58 138 Z" fill="url(#pf-rose-dark)" stroke="#5A2234" stroke-width="0.8"/>
+      <path d="M78 70 L88 150 L74 138 L68 152 L62 138 Z" fill="url(#pf-rose-dark)" stroke="#5A2234" stroke-width="0.8"/>
+      <!-- Rosette: starburst pleats in rosewood, parchment center -->
       <g transform="translate(60,54)">
-        <!-- 20-point starburst (rosette pleats) -->
-        <path d="M 0,-46 L 6,-38 L 14,-42 L 16,-33 L 25,-33 L 22,-24 L 32,-20 L 26,-13 L 38,-6 L 28,-3 L 42,6 L 31,9 L 38,20 L 27,20 L 30,32 L 19,27 L 18,38 L 10,30 L 3,42 L 0,32 L -3,42 L -10,30 L -18,38 L -19,27 L -30,32 L -27,20 L -38,20 L -31,9 L -42,6 L -28,-3 L -38,-6 L -26,-13 L -32,-20 L -22,-24 L -25,-33 L -16,-33 L -14,-42 L -6,-38 Z" fill="url(#pf-gold)" stroke="#8A6034" stroke-width="0.8"/>
-        <!-- Inner flat circle with rope border -->
-        <circle cx="0" cy="0" r="25" fill="url(#pf-center)" stroke="#B08340" stroke-width="1"/>
-        <circle cx="0" cy="0" r="21" fill="none" stroke="#C4936A" stroke-width="0.5" stroke-dasharray="1.5 1.5" opacity="0.7"/>
-        <!-- Central ✦ -->
-        <text x="0" y="7" text-anchor="middle" font-family="Cormorant, serif" font-size="28" font-weight="500" fill="#6B4422">✦</text>
+        <path d="M 0,-46 L 6,-38 L 14,-42 L 16,-33 L 25,-33 L 22,-24 L 32,-20 L 26,-13 L 38,-6 L 28,-3 L 42,6 L 31,9 L 38,20 L 27,20 L 30,32 L 19,27 L 18,38 L 10,30 L 3,42 L 0,32 L -3,42 L -10,30 L -18,38 L -19,27 L -30,32 L -27,20 L -38,20 L -31,9 L -42,6 L -28,-3 L -38,-6 L -26,-13 L -32,-20 L -22,-24 L -25,-33 L -16,-33 L -14,-42 L -6,-38 Z" fill="url(#pf-rose)" stroke="#6B2A3B" stroke-width="0.8"/>
+        <!-- Parchment label with a subtle gold accent dashed ring -->
+        <circle cx="0" cy="0" r="25" fill="url(#pf-center)" stroke="#8E3A4E" stroke-width="1"/>
+        <circle cx="0" cy="0" r="21" fill="none" stroke="#C4936A" stroke-width="0.5" stroke-dasharray="1.5 1.5" opacity="0.55"/>
+        <!-- Central ✦ in rosewood -->
+        <text x="0" y="8" text-anchor="middle" font-family="Cormorant, serif" font-size="28" font-weight="500" fill="#8E3A4E">✦</text>
       </g>
     </svg>
   </div>
@@ -1938,7 +1911,7 @@ function submitPromo(e,variant){
   <div class="prize-modal-inner">
     <button class="prize-modal-close" type="button" onclick="closePrizeModal()" aria-label="Close">✕</button>
     <div class="prize-modal-eye">✦ Founder's Prize ✦</div>
-    <h2 class="prize-modal-h" id="prize-modal-title">Reserve one of the first 50 boxes to win a <em>premium matcha ritual set</em></h2>
+    <h2 class="prize-modal-h" id="prize-modal-title">Reserve now to win a <em>premium matcha set</em></h2>
 
     <!-- Light-blurred matcha photo teaser. The file lives at
          assets/matcha-prize.jpg — if missing, the backdrop colour and the
@@ -2976,22 +2949,25 @@ function closeQuiz(){
 function restartQuiz(){
   twDone={};
   S={name:'',scene:'',size:'',crafts:[],craftQty:{},exp:'',color:'',colorCustom:'',notes:'',mbti:'',zodiac:'',adjectives:'',tarot:'',symbol:''};
-  document.getElementById('input-name').value='';
-  var adjEl=document.getElementById('input-adjectives'); if(adjEl) adjEl.value='';
-  document.getElementById('input-notes').value='';
-  document.getElementById('color-custom-input').value='';
+  // Safely clear every input the quiz owns — each element may or may not
+  // exist depending on current slide layout, so guard every lookup.
+  ['input-name','input-adjectives','color-custom-input'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
   document.querySelectorAll('.qchip').forEach(c=>c.classList.remove('picked'));
+  document.querySelectorAll('.tarot-card').forEach(c=>c.classList.remove('picked'));
+  document.querySelectorAll('.symbol-tile').forEach(c=>c.classList.remove('picked'));
   document.querySelectorAll('.craft-qty-card').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('.qty-display').forEach(function(el){el.textContent='0';});
-  ['btn-0','btn-1','btn-2','btn-3','btn-4'].forEach(id=>{
+  ['btn-0','btn-1','btn-2','btn-3','btn-4'].forEach(function(id){
     var b=document.getElementById(id); if(b) b.disabled=true;
   });
   /* Reset any name-interpolated UI so the next quiz starts fresh */
-  document.querySelectorAll('.quiz-name-inline').forEach(el=>{el.textContent='';});
+  document.querySelectorAll('.quiz-name-inline').forEach(function(el){ el.textContent=''; });
   var s1q = document.getElementById('s1-q');
   if(s1q) s1q.innerHTML = 'What\'s the <span class="qhi-pink">occasion?</span>';
   /* Clear result page name slots too */
-  document.querySelectorAll('.result-name').forEach(el=>{el.textContent='';});
+  document.querySelectorAll('.result-name').forEach(function(el){ el.textContent=''; });
   setQuizBg('default');
   setProgress(0);
   goToSlide(0);
