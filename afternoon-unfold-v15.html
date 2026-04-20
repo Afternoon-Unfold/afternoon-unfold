@@ -954,25 +954,16 @@ footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.
 /* Modal prize line */
 .reserve-prize-line{background:linear-gradient(90deg,rgba(196,147,106,0.12) 0%,rgba(185,79,99,0.08) 100%);border:1px solid rgba(196,147,106,0.3);padding:10px 14px;margin:0 0 18px;font-size:12.5px;color:#3A2E24;letter-spacing:0.01em;line-height:1.5;}
 .reserve-prize-line strong{color:#B94F63;font-weight:600;}
-/* Floating Founder's Prize — rosette (rosewood) + ribbon tails on right edge.
-   Shadow is warm neutral (drawn from the rosewood/parchment palette),
-   not gold. Hover reveals a parchment panel with the teaser copy. */
-.prize-float{position:fixed;right:18px;top:40%;transform:translateY(-50%);z-index:320;cursor:pointer;display:flex;align-items:center;gap:12px;user-select:none;font-family:'Raleway',sans-serif;}
-.prize-float .pf-rosette{width:68px;height:92px;filter:drop-shadow(0 8px 18px rgba(142,58,78,0.35)) drop-shadow(0 2px 5px rgba(26,18,8,0.18));transition:transform 0.35s cubic-bezier(0.2,0.9,0.2,1);animation:pfSway 4s ease-in-out infinite;}
-.prize-float .pf-svg{display:block;width:100%;height:100%;}
-.prize-float .pf-copy{background:var(--parchment);border:1px solid var(--border);padding:8px 12px 8px 14px;box-shadow:0 10px 26px -10px rgba(26,18,8,0.22);transform:translateX(-8px);opacity:0;pointer-events:none;transition:transform 0.3s ease,opacity 0.3s ease;max-width:0;overflow:hidden;white-space:nowrap;display:flex;flex-direction:column;gap:2px;}
-.prize-float:hover .pf-copy,
-.prize-float:focus-visible .pf-copy{transform:translateX(0);opacity:1;max-width:260px;}
-.prize-float:hover .pf-rosette{transform:rotate(-6deg) scale(1.05);}
-.prize-float .pf-k{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#B94F63;font-weight:700;}
-.prize-float .pf-v{font-family:'Cormorant',serif;font-style:italic;font-size:14.5px;color:var(--ink);}
-@keyframes pfSway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+/* Floating Founder's Prize — subtle translucent circle, bottom-right corner */
+.prize-float{position:fixed;right:22px;bottom:22px;z-index:320;width:72px;height:72px;border-radius:50%;background:rgba(245,235,228,0.72);border:1px solid rgba(185,79,99,0.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink);user-select:none;font-family:'Raleway',sans-serif;transition:transform 0.25s ease,background 0.25s ease,box-shadow 0.25s ease,border-color 0.25s ease;box-shadow:0 6px 18px -8px rgba(20,14,8,0.18);}
+.prize-float:hover,
+.prize-float:focus-visible{background:rgba(253,248,245,0.95);transform:scale(1.06);box-shadow:0 12px 28px -10px rgba(20,14,8,0.28);border-color:#B94F63;outline:none;}
+.prize-float .pf-star{font-size:11px;color:#B94F63;line-height:1;margin-bottom:3px;letter-spacing:0.2em;}
+.prize-float .pf-label{font-family:'Cormorant',serif;font-style:italic;font-size:15px;color:var(--ink);line-height:1;}
 body.overlay-active .prize-float{display:none;}
 @media (max-width:640px){
-  .prize-float{top:auto;bottom:18px;right:14px;transform:none;gap:0;}
-  .prize-float .pf-rosette{width:56px;height:76px;}
-  .prize-float:hover .pf-copy,
-  .prize-float:focus-visible .pf-copy{max-width:0;opacity:0;}
+  .prize-float{right:14px;bottom:14px;width:60px;height:60px;}
+  .prize-float .pf-label{font-size:13px;}
 }
 
 /* Founder's Prize detail modal — brand-consistent. Parchment modal body
@@ -989,11 +980,13 @@ body.overlay-active .prize-float{display:none;}
 .prize-modal-h em{font-style:italic;color:#B94F63;}
 .prize-modal-sub{font-size:13.5px;color:var(--dust);line-height:1.65;margin-bottom:1.4rem;padding:0 0.5rem;}
 /* Blurred teaser "image" — made entirely with CSS so no asset needed */
-.prize-teaser{position:relative;width:100%;aspect-ratio:4/3;margin:0 0 1.25rem;overflow:hidden;border:1px solid rgba(196,147,106,0.35);background:linear-gradient(135deg,#B8D4A3 0%,#7FA07A 55%,#3C553A 100%);}
-.prize-teaser .pt-matcha-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:blur(5px) saturate(1.08) brightness(0.95);transform:scale(1.05);}
-.prize-teaser::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,0.28) 90%);pointer-events:none;z-index:1;}
-.prize-teaser .pt-q{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant',serif;font-size:140px;font-weight:500;color:#FFE8B8;text-shadow:0 4px 32px rgba(217,165,87,0.6),0 2px 12px rgba(0,0,0,0.5);line-height:1;z-index:2;}
-.prize-teaser .pt-hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,232,184,0.85);font-weight:600;z-index:2;text-shadow:0 2px 8px rgba(0,0,0,0.6);}
+/* Prize teaser — image shown clearly (no blur); a very large parchment
+   ? sits over the center to partially block the reveal. */
+.prize-teaser{position:relative;width:100%;aspect-ratio:4/3;margin:0 0 1.25rem;overflow:hidden;border:1px solid var(--border);background:var(--parchment);}
+.prize-teaser .pt-matcha-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+.prize-teaser::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0.08) 0%,transparent 55%);pointer-events:none;z-index:1;}
+.prize-teaser .pt-q{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant',serif;font-size:clamp(200px,42vw,260px);font-weight:500;color:rgba(253,248,245,0.94);text-shadow:0 10px 40px rgba(20,14,8,0.6),0 4px 18px rgba(20,14,8,0.45);line-height:1;z-index:2;}
+.prize-teaser .pt-hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(253,248,245,0.95);font-weight:600;z-index:2;text-shadow:0 2px 10px rgba(20,14,8,0.7);}
 .prize-modal-meta{background:var(--white);border:1px solid var(--border);padding:14px 16px;margin-bottom:1.2rem;font-size:13px;position:relative;}
 .prize-modal-meta .pm-meta-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed rgba(196,147,106,0.2);}
 .prize-modal-meta .pm-meta-row:last-child{border-bottom:none;}
@@ -1863,47 +1856,11 @@ function submitPromo(e,variant){
 })();
 </script>
 
-<!-- Floating Founder's Prize rosette — award ribbon shape on right edge.
-     Click opens a full-screen detail modal with the blurred matcha teaser. -->
+<!-- Floating Founder's Prize — simple translucent round button, bottom-right.
+     Click opens the prize detail modal. -->
 <div class="prize-float" id="prize-float" onclick="openPrizeModal()" role="button" tabindex="0" aria-label="View Founder's Prize">
-  <div class="pf-rosette">
-    <svg class="pf-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <!-- Brand rosewood gradient, used for the rosette body -->
-        <linearGradient id="pf-rose" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#D89DA9"/>
-          <stop offset="45%" stop-color="#B94F63"/>
-          <stop offset="100%" stop-color="#8E3A4E"/>
-        </linearGradient>
-        <!-- Darker rosewood for the hanging ribbon tails -->
-        <linearGradient id="pf-rose-dark" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#A0384F"/>
-          <stop offset="100%" stop-color="#6B2A3B"/>
-        </linearGradient>
-        <!-- Parchment/cream inner label -->
-        <radialGradient id="pf-center" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stop-color="#FDF8F5"/>
-          <stop offset="100%" stop-color="#F5EBE4"/>
-        </radialGradient>
-      </defs>
-      <!-- Two ribbon tails (darker rosewood), hang down behind the rosette -->
-      <path d="M42 70 L32 150 L46 138 L52 152 L58 138 Z" fill="url(#pf-rose-dark)" stroke="#5A2234" stroke-width="0.8"/>
-      <path d="M78 70 L88 150 L74 138 L68 152 L62 138 Z" fill="url(#pf-rose-dark)" stroke="#5A2234" stroke-width="0.8"/>
-      <!-- Rosette: starburst pleats in rosewood, parchment center -->
-      <g transform="translate(60,54)">
-        <path d="M 0,-46 L 6,-38 L 14,-42 L 16,-33 L 25,-33 L 22,-24 L 32,-20 L 26,-13 L 38,-6 L 28,-3 L 42,6 L 31,9 L 38,20 L 27,20 L 30,32 L 19,27 L 18,38 L 10,30 L 3,42 L 0,32 L -3,42 L -10,30 L -18,38 L -19,27 L -30,32 L -27,20 L -38,20 L -31,9 L -42,6 L -28,-3 L -38,-6 L -26,-13 L -32,-20 L -22,-24 L -25,-33 L -16,-33 L -14,-42 L -6,-38 Z" fill="url(#pf-rose)" stroke="#6B2A3B" stroke-width="0.8"/>
-        <!-- Parchment label with a subtle gold accent dashed ring -->
-        <circle cx="0" cy="0" r="25" fill="url(#pf-center)" stroke="#8E3A4E" stroke-width="1"/>
-        <circle cx="0" cy="0" r="21" fill="none" stroke="#C4936A" stroke-width="0.5" stroke-dasharray="1.5 1.5" opacity="0.55"/>
-        <!-- Central ✦ in rosewood -->
-        <text x="0" y="8" text-anchor="middle" font-family="Cormorant, serif" font-size="28" font-weight="500" fill="#8E3A4E">✦</text>
-      </g>
-    </svg>
-  </div>
-  <div class="pf-copy">
-    <span class="pf-k">Founder's Prize</span>
-    <span class="pf-v">Matcha set — reveal &rarr;</span>
-  </div>
+  <span class="pf-star">✦</span>
+  <span class="pf-label">Prize</span>
 </div>
 
 <!-- Founder's Prize detail modal — blurred matcha teaser, opens on rosette click -->
@@ -1911,7 +1868,7 @@ function submitPromo(e,variant){
   <div class="prize-modal-inner">
     <button class="prize-modal-close" type="button" onclick="closePrizeModal()" aria-label="Close">✕</button>
     <div class="prize-modal-eye">✦ Founder's Prize ✦</div>
-    <h2 class="prize-modal-h" id="prize-modal-title">Reserve now to win a <em>premium matcha set</em></h2>
+    <h2 class="prize-modal-h" id="prize-modal-title">Reserve now to win a<br><em>premium matcha set</em></h2>
 
     <!-- Light-blurred matcha photo teaser. The file lives at
          assets/matcha-prize.jpg — if missing, the backdrop colour and the
