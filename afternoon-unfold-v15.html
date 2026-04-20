@@ -291,6 +291,7 @@ section{min-height:100vh;padding-top:58px;}
 .qchip:hover{border-color:#B88896;color:#8E3A4E;background:rgba(253,250,246,1);}
 .qchip.picked{background:linear-gradient(135deg,#E8BBC3 0%,#D89DA9 100%);color:#6B2A3B;border-color:#C77788;box-shadow:0 2px 10px -4px rgba(185,79,99,0.35);}
 .qchip.color-chip{display:flex;align-items:center;gap:8px;padding:10px 18px;}
+.qchip.qchip-mini{font-size:11px;padding:8px 10px;letter-spacing:0.04em;text-align:center;}
 .color-swatch{width:16px;height:16px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,0.1);}
 
 /* Craft cards for quiz */
@@ -798,6 +799,18 @@ footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.
 .result-items-hint-eye{display:block;font-family:'Raleway',sans-serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,220,180,0.72);margin-bottom:8px;font-weight:500;}
 .result-items-wrap.revealed .result-items-hint{opacity:0;}
 
+/* Persona reading — gypsy-card style card on the result page */
+.persona-reading{background:linear-gradient(155deg,rgba(196,147,106,0.08) 0%,rgba(185,79,99,0.06) 100%);border:1px solid rgba(196,147,106,0.28);padding:1.1rem 1.25rem 1.2rem;margin-bottom:1.25rem;position:relative;}
+.persona-reading::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid rgba(196,147,106,0.14);pointer-events:none;}
+.persona-reading .pr-eye{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:10px;position:relative;}
+.persona-reading .pr-text{font-family:'Cormorant',serif;font-size:15px;line-height:1.55;color:var(--ink);margin-bottom:12px;font-style:normal;position:relative;}
+.persona-reading .pr-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:relative;}
+.persona-reading .pr-card{background:var(--white);border:1px solid rgba(196,147,106,0.18);padding:10px 8px 11px;text-align:center;}
+.persona-reading .pr-card-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--gold);font-size:14px;}
+.persona-reading .pr-card-swatch{border-radius:50%;border:1px solid rgba(0,0,0,0.06);}
+.persona-reading .pr-card-label{font-family:'Raleway',sans-serif;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--dust);font-weight:500;margin-bottom:4px;}
+.persona-reading .pr-card-value{font-family:'Cormorant',serif;font-size:13px;color:var(--ink);line-height:1.3;}
+
 /* ══════════════ EMAIL PROMO MODAL — 30s popup (UO/H&M style) ══════════════ */
 .promo-modal{display:none;position:fixed;inset:0;z-index:450;align-items:center;justify-content:center;background:rgba(20,14,8,0.55);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);padding:1.5rem;animation:promoFade 0.35s ease;}
 .promo-modal.open{display:flex;}
@@ -1030,6 +1043,15 @@ body.overlay-active #main-nav{top:0;}
 #reserved-page .rp-next li::before{content:'';position:absolute;left:4px;top:14px;width:6px;height:6px;border-radius:50%;background:#B94F63;opacity:0.5;}
 #reserved-page .rp-next li strong{color:var(--ink);font-weight:600;}
 #reserved-page .rp-next li code{background:rgba(185,79,99,0.12);padding:2px 7px;border-radius:3px;font-family:inherit;color:#8E3A4E;font-weight:600;font-size:0.92em;}
+#reserved-page .rp-prize{background:linear-gradient(155deg,rgba(196,147,106,0.1) 0%,rgba(185,79,99,0.06) 100%);border:1px solid rgba(196,147,106,0.32);padding:1.6rem 1.8rem 1.5rem;margin:0 auto 1.75rem;max-width:480px;text-align:center;position:relative;}
+#reserved-page .rp-prize::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid rgba(196,147,106,0.18);pointer-events:none;}
+#reserved-page .rp-prize-badge{display:inline-block;padding:4px 14px;border:1px solid var(--gold);color:var(--gold);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;margin-bottom:14px;background:var(--white);position:relative;}
+#reserved-page .rp-prize-h{font-family:'Cormorant',serif;font-size:1.35rem;font-weight:500;color:var(--ink);line-height:1.35;margin-bottom:10px;position:relative;}
+#reserved-page .rp-prize-h em{font-style:normal;color:#B94F63;}
+#reserved-page .rp-prize-sub{font-size:13.5px;color:var(--dust);line-height:1.7;margin-bottom:10px;position:relative;}
+#reserved-page .rp-prize-sub em{font-style:italic;color:var(--ink);}
+#reserved-page .rp-prize-sub strong{color:var(--ink);font-weight:600;}
+#reserved-page .rp-prize-fine{font-size:12px;color:var(--dust);line-height:1.6;margin:0;font-style:italic;position:relative;opacity:0.8;}
 #reserved-page .rp-social{font-size:13px;color:var(--dust);line-height:1.7;margin-bottom:2rem;}
 #reserved-page .rp-social a{color:#B94F63;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(185,79,99,0.3);}
 #reserved-page .rp-social a:hover{border-bottom-color:#B94F63;}
@@ -1473,6 +1495,7 @@ function submitWelcomeNotify(form){
     <div class="faq-item open"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">How long does delivery take?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">We're in our Round 1 reservation stage — our Founding 50 boxes ship July 4, 2026, US only. Once shipping opens, please allow 5–10 business days from dispatch.</div></div></div>
     <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">Are the blind boxes suitable for complete beginners?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Absolutely. Every blind box includes a printed step-by-step guide plus QR code video tutorials. No prior experience needed.</div></div></div>
     <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What is the mystery add-on?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Every blind box includes a hand-picked extra based on your answers and the scene you're creating. Always a surprise until you open the box.</div></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What's the Founder's Prize?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Every Founding 50 member is automatically entered into a draw for a handmade matcha ritual set — ceramic bowl, bamboo whisk, scoop, and a tin of premium ceremonial matcha. One winner drawn on May 15, right after Round 1 closes. Announced via email and Instagram. No extra entry needed — reserving your box is your entry.</div></div></div>
     <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">Can I send a blind box as a gift?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Yes. Every blind box arrives in a beautiful presentation box. You can leave a handwritten note while placing your order.</div></div></div>
   </div>
   </div>
@@ -1786,7 +1809,7 @@ function submitPromo(e,variant){
     <!-- S0: Name -->
     <div class="quiz-slide active" id="slide-0">
       <div class="quiz-slide-inner"><div class="quiz-inner">
-        <div class="quiz-counter">01 — 06</div>
+        <div class="quiz-counter">01 — 05</div>
         <h2 class="quiz-q">Hello! <span class="qhi-pink">What's your name?</span></h2>
         <p class="quiz-sub">Every blind box we make is personal, and it begins with you.</p>
         <input class="quiz-name-input" id="input-name" type="text" placeholder="Your name" autocomplete="off" oninput="onNameInput()">
@@ -1797,37 +1820,19 @@ function submitPromo(e,variant){
       </div></div>
     </div>
 
-    <!-- S1: Scene -->
+    <!-- S1: Occasion -->
     <div class="quiz-slide" id="slide-1">
       <div class="quiz-slide-inner"><div class="quiz-inner">
-        <div class="quiz-counter">02 — 06</div>
-        <h2 class="quiz-q" id="s1-q">And <span class="qhi-pink">who</span> are you<br>crafting with?</h2>
+        <div class="quiz-counter">02 — 05</div>
+        <h2 class="quiz-q" id="s1-q">What's the <span class="qhi-pink">occasion?</span></h2>
         <p class="quiz-sub">This shapes everything — the craft selection, the pace, and the magic extras we add.</p>
         <div id="scene-chips">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:540px;margin:0 auto;">
-            <div class="qchip" onclick="pickScene('date',this)">A loved one</div>
-            <div class="qchip" onclick="pickScene('friends',this)">My friends</div>
-            <div class="qchip" onclick="pickScene('family',this)">The whole family</div>
-            <div class="qchip" onclick="pickScene('kids',this)">My little one</div>
-            <div class="qchip" onclick="pickScene('self',this)">Just me</div>
-            <div class="qchip" onclick="pickScene('gift',this)">It's a gift! 🎁</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:440px;margin:0 auto;">
+            <div class="qchip" onclick="pickScene('date',this)">Date Night</div>
+            <div class="qchip" onclick="pickScene('friends',this)">Friends Hang</div>
+            <div class="qchip" onclick="pickScene('family',this)">Family Time</div>
+            <div class="qchip" onclick="pickScene('self',this)">Solo Unwind</div>
           </div>
-        </div>
-
-        <!-- Gift sub-question: shown only when "It's a gift!" is selected -->
-        <div id="gift-subq" style="display:none;margin-top:1.75rem;padding-top:1.5rem;border-top:1px solid rgba(196,116,154,0.2);">
-          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#C4749A;font-weight:500;margin-bottom:12px;">This gift is for…</p>
-          <div class="quiz-chips" id="giftfor-chips">
-            <div class="qchip" onclick="pickGiftFor('him',this)">Him — a guy</div>
-            <div class="qchip" onclick="pickGiftFor('her',this)">Her — a lady</div>
-            <div class="qchip" onclick="pickGiftFor('them',this)">Them — either works!</div>
-          </div>
-        </div>
-
-        <!-- Gift recipient name: shown after gender is picked -->
-        <div id="gift-name-subq" style="display:none;margin-top:1.25rem;">
-          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#C4749A;font-weight:500;margin-bottom:10px;">And their name?</p>
-          <input class="quiz-name-input" id="input-gift-name" type="text" placeholder="Their name" autocomplete="off" oninput="onGiftNameInput()" style="max-width:280px;font-size:1.5rem;">
         </div>
 
         <div class="quiz-nav">
@@ -1859,7 +1864,7 @@ function submitPromo(e,variant){
     <!-- S3: Craft -->
     <div class="quiz-slide" id="slide-3">
       <div class="quiz-slide-inner"><div class="quiz-inner-wide">
-        <div class="quiz-counter" id="s3-counter">04 — 06</div>
+        <div class="quiz-counter" id="s3-counter">03 — 05</div>
         <h2 class="quiz-q">Choose your <span class="qhi-pink">crafts</span> &amp; <span class="qhi-pink">quantities</span></h2>
         <p class="quiz-sub">How many of each? Perfect for groups — mix and match. e.g. 1 perler beads + 2 paint by numbers for 3 people.</p>
         <div id="craft-qty-grid"></div>
@@ -1873,11 +1878,11 @@ function submitPromo(e,variant){
     <!-- S4: Colours + Duration -->
     <div class="quiz-slide" id="slide-4">
       <div class="quiz-slide-inner"><div class="quiz-inner">
-        <div class="quiz-counter" id="s4-counter">05 — 06</div>
+        <div class="quiz-counter" id="s4-counter">04 — 05</div>
         <h2 class="quiz-q" id="s4-q">Your <span class="qhi-purple">style</span> preferences</h2>
-        <p class="quiz-sub" id="s4-sub">This helps us personalise the colours and pace of your blind box.</p>
+        <p class="quiz-sub" id="s4-sub">This helps us personalise the colours of your blind box.</p>
 
-        <div style="margin-bottom:1.8rem;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
+        <div style="text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
           <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:10px;" id="s4-color-label">🎨 Favourite colour palette</p>
           <div id="color-chips" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:0 auto;">
             <div class="qchip color-chip" onclick="pickColor('pastel',this)"><div class="color-swatch" style="background:linear-gradient(135deg,#F5C0D8,#C0D8F5)"></div>Soft pastels</div>
@@ -1891,16 +1896,6 @@ function submitPromo(e,variant){
           </div>
         </div>
 
-        <div style="text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
-          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:10px;">⏱ How long would you like to craft?</p>
-          <div class="quiz-chips" id="time-chips">
-            <div class="qchip" onclick="pickTime('30',this)">Quick — under 30 min</div>
-            <div class="qchip" onclick="pickTime('60',this)">About an hour</div>
-            <div class="qchip" onclick="pickTime('2h',this)">A relaxed 2 hours</div>
-            <div class="qchip" onclick="pickTime('half',this)">Half a day — we're in no rush</div>
-          </div>
-        </div>
-
         <div class="quiz-nav">
           <button class="quiz-btn-back" onclick="goBack(4)">← Back</button>
           <button class="quiz-btn-next" id="btn-4" onclick="goNext(4)" disabled>Continue →</button>
@@ -1908,13 +1903,61 @@ function submitPromo(e,variant){
       </div></div>
     </div>
 
-    <!-- S5: Notes -->
+    <!-- S5: Optional personalization -->
     <div class="quiz-slide" id="slide-5">
       <div class="quiz-slide-inner"><div class="quiz-inner">
-        <div class="quiz-counter" id="s5-counter">06 — 06</div>
-        <h2 class="quiz-q">Anything else you'd<br>like us to <span class="qhi-pink">know?</span></h2>
-        <p class="quiz-sub">An occasion, a mood, a preference — even just a feeling. The more you share, the more personal your blind box. Entirely optional.</p>
-        <textarea class="quiz-notes" id="input-notes" placeholder="e.g. It's our anniversary and she loves anything floral and earthy. She's been really stressed lately — something calming would be perfect..." rows="4"></textarea>
+        <div class="quiz-counter" id="s5-counter">05 — 05</div>
+        <div style="display:inline-block;padding:4px 12px;border:1px solid rgba(196,147,106,0.4);border-radius:999px;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:14px;">✦ Optional — for a deeper reading</div>
+        <h2 class="quiz-q">A little more about <span class="qhi-pink">you?</span></h2>
+        <p class="quiz-sub">These help us tailor your mystery add-ons — your scent, your tea, your luck color. All optional. Skip anything.</p>
+
+        <div style="max-width:480px;margin:1.5rem auto 0;text-align:left;">
+
+          <!-- MBTI -->
+          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:8px;">🔮 Your MBTI <span style="color:var(--dust);text-transform:none;letter-spacing:0;font-weight:400;">— if you know it</span></p>
+          <div id="mbti-chips" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
+            <div class="qchip qchip-mini" onclick="pickMbti('INTJ',this)">INTJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('INTP',this)">INTP</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ENTJ',this)">ENTJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ENTP',this)">ENTP</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('INFJ',this)">INFJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('INFP',this)">INFP</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ENFJ',this)">ENFJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ENFP',this)">ENFP</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ISTJ',this)">ISTJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ISFJ',this)">ISFJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ESTJ',this)">ESTJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ESFJ',this)">ESFJ</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ISTP',this)">ISTP</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ISFP',this)">ISFP</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ESTP',this)">ESTP</div>
+            <div class="qchip qchip-mini" onclick="pickMbti('ESFP',this)">ESFP</div>
+          </div>
+          <p style="font-size:11px;color:var(--dust);margin-bottom:6px;">Don't know it? Describe yourself in 3–5 words:</p>
+          <input class="quiz-name-input" id="input-adjectives" type="text" placeholder="e.g. curious, soft, a little chaotic…" autocomplete="off" oninput="onAdjInput()" style="font-size:1rem;margin-bottom:1.5rem;">
+
+          <!-- Zodiac -->
+          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:8px;">✧ Your zodiac sign</p>
+          <div id="zodiac-chips" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:1.5rem;">
+            <div class="qchip qchip-mini" onclick="pickZodiac('aries',this)">♈ Aries</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('taurus',this)">♉ Taurus</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('gemini',this)">♊ Gemini</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('cancer',this)">♋ Cancer</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('leo',this)">♌ Leo</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('virgo',this)">♍ Virgo</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('libra',this)">♎ Libra</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('scorpio',this)">♏ Scorpio</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('sagittarius',this)">♐ Sagittarius</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('capricorn',this)">♑ Capricorn</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('aquarius',this)">♒ Aquarius</div>
+            <div class="qchip qchip-mini" onclick="pickZodiac('pisces',this)">♓ Pisces</div>
+          </div>
+
+          <!-- Notes -->
+          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:8px;">✎ Anything else we should know?</p>
+          <textarea class="quiz-notes" id="input-notes" placeholder="An occasion, a mood, a preference — even just a feeling. The more you share, the more personal your blind box." rows="3" style="margin-bottom:0;"></textarea>
+        </div>
+
         <div class="quiz-nav">
           <button class="quiz-btn-back" onclick="goBack(5)">← Back</button>
           <button class="quiz-btn-next" id="btn-5" onclick="goNext(5)">See my blind box →</button>
@@ -1963,14 +2006,37 @@ function submitPromo(e,variant){
             <div class="rkp-items" id="rkp-items"></div>
           </div>
 
+          <!-- Persona "reading" — only shown when MBTI or zodiac was filled in -->
+          <div class="persona-reading" id="persona-reading" style="display:none;">
+            <div class="pr-eye">✦ Your reading</div>
+            <div class="pr-text" id="pr-text"></div>
+            <div class="pr-cards">
+              <div class="pr-card">
+                <div class="pr-card-icon">✦</div>
+                <div class="pr-card-label">Your scent</div>
+                <div class="pr-card-value" id="pr-scent">—</div>
+              </div>
+              <div class="pr-card">
+                <div class="pr-card-icon">✧</div>
+                <div class="pr-card-label">Your tea</div>
+                <div class="pr-card-value" id="pr-tea">—</div>
+              </div>
+              <div class="pr-card">
+                <div class="pr-card-icon pr-card-swatch" id="pr-color-swatch" style="background:#C4936A;"></div>
+                <div class="pr-card-label">Your color</div>
+                <div class="pr-card-value" id="pr-color">—</div>
+              </div>
+            </div>
+          </div>
+
           <div class="result-price-row" style="margin-top:8px;">
             <div class="result-price-label" style="font-size:14px;">Retail</div>
-            <div class="result-price" id="result-price" style="text-decoration:line-through;opacity:0.55;font-size:1.9rem;">$55</div>
+            <div class="result-price" id="result-price" style="text-decoration:line-through;opacity:0.55;font-size:1.9rem;">$54.99</div>
             <div class="result-price-label" style="font-size:14px;">USD · Free US shipping</div>
           </div>
           <div class="result-price-row" style="margin-top:2px;">
             <div class="result-price-label" style="color:#B94F63;font-weight:500;font-size:14px;">Founding 50 (−15%)</div>
-            <div class="result-price" id="result-presale-price" style="color:#B94F63;font-size:2.6rem;">$47</div>
+            <div class="result-price" id="result-presale-price" style="color:#B94F63;font-size:2.6rem;">$46.99</div>
           </div>
           <ul style="list-style:none;padding:0;margin:14px 0 0;font-size:13px;color:var(--dust);line-height:1.9;">
             <li>✦ Reserve free now</li>
@@ -2002,7 +2068,7 @@ function submitPromo(e,variant){
         <div class="rs-row"><span class="rs-k">Bundle</span><span class="rs-v" id="rs-scene">—</span></div>
         <div class="rs-row"><span class="rs-k">Crafts</span><span class="rs-v" id="rs-crafts">—</span></div>
         <div class="rs-row"><span class="rs-k">Palette</span><span class="rs-v" id="rs-palette">—</span></div>
-        <div class="rs-row"><span class="rs-k">Pace</span><span class="rs-v" id="rs-pace">—</span></div>
+        <div class="rs-row" id="rs-vibe-row" style="display:none;"><span class="rs-k">Your reading</span><span class="rs-v" id="rs-vibe">—</span></div>
         <div class="rs-row rs-total"><span class="rs-k">Retail</span><span class="rs-v"><span class="ps-strike" id="rs-retail">$0</span></span></div>
         <div class="rs-row rs-total" style="border-top:none;padding-top:2px;"><span class="rs-k" style="color:#B94F63;">Founding 50 price (−15%)</span><span class="rs-v"><span class="ps-final" id="rs-presale" style="color:#B94F63;font-weight:700;">$0</span></span></div>
       </div>
@@ -2024,8 +2090,27 @@ function submitPromo(e,variant){
           </div>
         </div>
 
+        <!-- Gift toggle: checked reveals gift sub-fields below -->
+        <label style="display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;user-select:none;padding:10px 0;">
+          <input type="checkbox" id="rsv-is-gift" onchange="toggleGiftFields()" style="width:16px;height:16px;cursor:pointer;accent-color:#B94F63;margin:0;">
+          <span style="font-size:13px;color:var(--ink);letter-spacing:0.02em;">🎁 This is a gift for someone</span>
+        </label>
+
+        <div id="rsv-gift-fields" style="display:none;padding:14px;background:rgba(196,116,154,0.06);border:1px solid rgba(196,116,154,0.22);margin-bottom:10px;">
+          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#B94F63;font-weight:500;margin:0 0 10px;">This gift is for…</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
+            <div class="qchip qchip-mini" onclick="pickRsvGiftFor('him',this)">Him</div>
+            <div class="qchip qchip-mini" onclick="pickRsvGiftFor('her',this)">Her</div>
+            <div class="qchip qchip-mini" onclick="pickRsvGiftFor('them',this)">Them</div>
+          </div>
+          <label class="reserve-label" for="rsv-gift-name">Their name</label>
+          <input type="text" id="rsv-gift-name" placeholder="e.g. Ella" autocomplete="off" oninput="onRsvGiftNameInput()" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:13px;color:var(--ink);margin-bottom:10px;outline:none;">
+          <label class="reserve-label" for="rsv-gift-note">Handwritten note on the box (optional)</label>
+          <textarea id="rsv-gift-note" rows="2" placeholder="e.g. Happy birthday, Ella — something to slow your afternoons ✦" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:14px;color:var(--ink);margin-bottom:0;resize:none;outline:none;"></textarea>
+        </div>
+
         <label class="reserve-label" for="rsv-msg">Anything we should know? (optional)</label>
-        <textarea id="rsv-msg" rows="2" placeholder="Gift note, something special, questions…" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:14.5px;color:var(--ink);margin-bottom:10px;resize:none;outline:none;"></textarea>
+        <textarea id="rsv-msg" rows="2" placeholder="Something special, a preference, a question…" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:14.5px;color:var(--ink);margin-bottom:10px;resize:none;outline:none;"></textarea>
 
         <button type="submit" class="reserve-submit" id="reserve-submit-btn">Reserve my spot →</button>
       </form>
@@ -2063,6 +2148,15 @@ function submitPromo(e,variant){
         <li><strong>After July 4</strong> · Your box ships free to your US address + activity guide emailed</li>
       </ul>
     </div>
+
+    <!-- Founder's Prize — automatic entry for every Founding 50 reservation -->
+    <div class="rp-prize">
+      <div class="rp-prize-badge">✦ Founder's Prize</div>
+      <h3 class="rp-prize-h">You've been entered — one of you wins a <em>matcha ritual set</em></h3>
+      <p class="rp-prize-sub">A handmade ceramic bowl (<em>chawan</em>), bamboo whisk (<em>chasen</em>), scoop, and a tin of premium ceremonial matcha — sourced from a small Kyoto-style maker. One winner drawn from the Founding 50 on <strong>May 15</strong>, right after Round 1 closes.</p>
+      <p class="rp-prize-fine">No extra entry needed — every reserved box is already in the hat. We'll announce the winner via email and on Instagram.</p>
+    </div>
+
     <p class="rp-social">✦ Follow us on <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener">Instagram</a> / <a href="https://www.tiktok.com/@afternoonunfold" target="_blank" rel="noopener">TikTok</a> for behind-the-scenes as we pack the Founding 50.</p>
     <div class="rp-actions">
       <button class="rp-back-btn" type="button" onclick="closeReservedPage()">← Back to main page</button>
@@ -2172,34 +2266,128 @@ var CRAFTS = [
 ];
 
 var SCENES = {
-  date:    {label:'Date Night',       color:'#E8543A', price:66, needsSize:false,
+  date:    {label:'Date Night',    color:'#E8543A', price:66, needsSize:false,
     items:['Activity guide with illustrated steps — emailed to you after purchase','Beautiful hand towel, exclusively designed','Floral tea — a blend chosen for the moment','Hand cream — a little self-care after creating','<strong style="color:#B94F63;">Some surprise just for you ✦</strong>'],
     sub:"We've curated everything for a beautiful evening in. Light the candle, open the blind box, make something together."},
-  friends: {label:"Girls' Night In",  color:'#E8A020', price:62, needsSize:true,
+  friends: {label:'Friends Hang',  color:'#E8A020', price:62, needsSize:true,
     items:['Activity guide with illustrated steps — emailed to you after purchase','Beautiful hand towel, exclusively designed','Floral tea — a blend chosen for the moment','Hand cream — a little self-care after creating','<strong style="color:#B94F63;">Some surprise just for you ✦</strong>'],
-    sub:'Your perfect girls\' night, ready to unbox. All materials sized for your group.'},
-  family:  {label:'Family Afternoon', color:'#3A9E6F', price:76, needsSize:true,
+    sub:'Your perfect group hang, ready to unbox. All materials sized for the whole crew.'},
+  family:  {label:'Family Time',   color:'#3A9E6F', price:76, needsSize:true,
     items:['Activity guide with illustrated steps — emailed to you after purchase','Beautiful hand towel, exclusively designed','Floral tea — a blend chosen for the moment','Hand cream — a little self-care after creating','<strong style="color:#B94F63;">Some surprise just for you ✦</strong>'],
-    sub:'Made for the whole household. Adults, teens, and kids all have a role.'},
-  kids:    {label:'Little Makers',    color:'#3A7BE8', price:52, needsSize:true,
-    items:['Activity guide with illustrated steps — emailed to you after purchase','Beautiful hand towel, exclusively designed','Floral tea — a blend chosen for the moment','Hand cream — a little self-care after creating','<strong style="color:#B94F63;">Some surprise just for you ✦</strong>'],
-    sub:'Safe, joyful, age-appropriate. Your little one will be so proud.'},
-  self:    {label:'Just Me',          color:'#8B5CE8', price:58, needsSize:false,
+    sub:'Made for everyone at home — the little ones, the teens, the grown-ups. Every age has a role.'},
+  self:    {label:'Solo Unwind',   color:'#8B5CE8', price:58, needsSize:false,
     items:['Activity guide with illustrated steps — emailed to you after purchase','Beautiful hand towel, exclusively designed','Floral tea — a blend chosen for the moment','Hand cream — a little self-care after creating','<strong style="color:#B94F63;">Some surprise just for you ✦</strong>'],
     sub:'Step away from everything. A few hours making something with your hands.'},
-  surprise: {label:'A Surprise',       color:'#C4936A', price:62, needsSize:false,
-    items:['Activity guide with illustrated steps — emailed to you after purchase','Beautiful hand towel, exclusively designed','Floral tea — a blend chosen for the moment','Hand cream — a little self-care after creating','<strong style="color:#B94F63;">Some surprise just for you ✦</strong>'],
-    sub:'Leave it entirely to us. We\'ll pick everything — the craft, the extras, the mood. Just open and enjoy.'},
-  gift:     {label:"It's a Gift",      color:'#C4749A', price:66, needsSize:false,
-    items:['Activity guide with illustrated steps — emailed to you after purchase','Beautiful hand towel, exclusively designed','Floral tea — a blend chosen for the moment','Hand cream — a little self-care after creating','Handwritten gift note included','<strong style="color:#B94F63;">Some surprise just for you ✦</strong>'],
-    sub:'A beautifully curated gift — everything thoughtfully chosen for someone special. Ready to wrap and give.'},
 };
+
+/* ════════════════════════════════════════════════
+   PERSONA MAPPING — personality inputs → add-on selections + reading
+   Logic: zodiac element drives scent + tea; MBTI temperament × element
+   picks the luck color. Not random — each combo has one deterministic
+   result, so the same answers always produce the same box. Zora uses
+   these as guides when hand-packing.
+════════════════════════════════════════════════ */
+var PERSONA = {
+  zodiacElement: {
+    aries:'fire', leo:'fire', sagittarius:'fire',
+    taurus:'earth', virgo:'earth', capricorn:'earth',
+    gemini:'air', libra:'air', aquarius:'air',
+    cancer:'water', scorpio:'water', pisces:'water'
+  },
+  // MBTI axis we use for color: the "N vs S" letter
+  //   N (intuitive) → softer, dreamier variant of each element
+  //   S (sensing)   → more grounded, tactile variant of each element
+  mbtiSense: {
+    INTJ:'N', INTP:'N', ENTJ:'N', ENTP:'N',
+    INFJ:'N', INFP:'N', ENFJ:'N', ENFP:'N',
+    ISTJ:'S', ISFJ:'S', ESTJ:'S', ESFJ:'S',
+    ISTP:'S', ISFP:'S', ESTP:'S', ESFP:'S'
+  },
+  scent: {
+    fire:  { name:'Bergamot & Orange Blossom', note:'bright, warming, citrus-floral' },
+    earth: { name:'Sandalwood & Vanilla',      note:'grounding, soft, amber-rich' },
+    air:   { name:'Lemon & Eucalyptus',        note:'fresh, cool, garden-green' },
+    water: { name:'Rose & Lavender',           note:'romantic, calming, soft floral' }
+  },
+  tea: {
+    fire:  { name:'Bergamot Black',       note:'warming, awakening' },
+    earth: { name:'Roasted Oolong & Honey', note:'nutty, rounded, grounding' },
+    air:   { name:'Jasmine Green',        note:'floral-fresh, clarity-bringing' },
+    water: { name:'Chamomile & Rose Bud', note:'gentle, calming, softening' }
+  },
+  // 8 deterministic luck-colors = 4 elements × 2 MBTI sense types
+  color: {
+    fire:  { N:{name:'Honey Gold',    hex:'#D9A557'}, S:{name:'Terracotta',   hex:'#C47A5A'} },
+    earth: { N:{name:'Sage',          hex:'#8FA284'}, S:{name:'Caramel',      hex:'#B07A4C'} },
+    air:   { N:{name:'Soft Lavender', hex:'#BFAED4'}, S:{name:'Clay Beige',   hex:'#C6B29A'} },
+    water: { N:{name:'Pearl Blue',    hex:'#A5BBCF'}, S:{name:'Dusty Rose',   hex:'#C89098'} }
+  }
+};
+
+/* Fallback: if the customer skipped zodiac, infer element from their colour palette pick.
+   If they also skipped colour, default to "water" (soft / safe). */
+function _inferElement(S){
+  if(S && S.zodiac && PERSONA.zodiacElement[S.zodiac]) return PERSONA.zodiacElement[S.zodiac];
+  var map = {warm:'fire', bold:'fire', pastel:'water', cool:'air'};
+  return map[S && S.color] || 'water';
+}
+function _inferSense(S){
+  if(S && S.mbti && PERSONA.mbtiSense[S.mbti]) return PERSONA.mbtiSense[S.mbti];
+  // No MBTI — default to N (softer / more ethereal variant, aligned with brand)
+  return 'N';
+}
+
+/* Given the state, return {scent, tea, color, readingText, show}.
+   `show` is true only when the customer actually gave us MBTI or zodiac;
+   otherwise we don't surface the reading (so it stays a reward for engagement). */
+function computeReading(S){
+  var hasMystic = !!((S && S.mbti) || (S && S.zodiac));
+  var el  = _inferElement(S);
+  var sense = _inferSense(S);
+  var scent = PERSONA.scent[el];
+  var tea   = PERSONA.tea[el];
+  var color = PERSONA.color[el][sense];
+  var name  = (S && S.name) || 'friend';
+
+  var opener;
+  if(S && S.zodiac && S.mbti){
+    opener = 'The stars read your chart, ' + name + ' — a ' + S.mbti + ' ' + (S.zodiac.charAt(0).toUpperCase()+S.zodiac.slice(1)) + '.';
+  } else if(S && S.zodiac){
+    opener = 'The stars whispered, ' + name + ' — your ' + (S.zodiac.charAt(0).toUpperCase()+S.zodiac.slice(1)) + ' sign runs ' + el + '.';
+  } else if(S && S.mbti){
+    opener = 'Your ' + S.mbti + ' heart calls for something specific, ' + name + '.';
+  } else {
+    opener = 'Your reading, ' + name + '.';
+  }
+  var body = ' We\'re tucking ' + scent.name.toLowerCase() + ' into your box — ' + scent.note + '. '
+    + tea.name + ' tea to match the mood. '
+    + 'And ' + color.name.toLowerCase() + ' is your colour this season — wear it somewhere only you can see.';
+  var closer = ' ✦';
+
+  return {
+    scent: scent, tea: tea, color: color, element: el, sense: sense,
+    readingText: opener + body + closer,
+    show: hasMystic
+  };
+}
 
 /* ════════════════════════════════════════════════
    STATE
 ════════════════════════════════════════════════ */
-var S = {name:'', scene:'', giftFor:'', giftRecipientName:'', size:'', crafts:[], craftQty:{}, exp:'', color:'', colorCustom:'', duration:'', notes:''};
+var S = {name:'', scene:'', size:'', crafts:[], craftQty:{}, exp:'', color:'', colorCustom:'', notes:'', mbti:'', zodiac:'', adjectives:''};
 var TOTAL_SLIDES = 8; // 0–7
+var _currentGrandTotal = 0;  // raw numeric total, set in buildResult, read by order snapshot
+
+/* ── Charm pricing: round up to nearest .99 for display ──
+   We keep internal math as clean numbers and only format at render time.
+   toCharm(55) → 54.99   toCharm(46.75) → 46.99   toCharm(86.19) → 86.99 */
+function toCharm(price){
+  var p = Number(price) || 0;
+  return Math.ceil(p) - 0.01;
+}
+function fmtPrice(price){
+  return '$' + toCharm(price).toFixed(2);
+}
 
 /* ════════════════════════════════════════════════
    OPEN / CLOSE / RESTART
@@ -2226,23 +2414,21 @@ function closeQuiz(){
 }
 function restartQuiz(){
   twDone={};
-  S={name:'',scene:'',giftFor:'',giftRecipientName:'',size:'',crafts:[],craftQty:{},exp:'',color:'',colorCustom:'',duration:'',notes:''};
+  S={name:'',scene:'',size:'',crafts:[],craftQty:{},exp:'',color:'',colorCustom:'',notes:'',mbti:'',zodiac:'',adjectives:''};
   document.getElementById('input-name').value='';
-  document.getElementById('input-gift-name').value='';
+  var adjEl=document.getElementById('input-adjectives'); if(adjEl) adjEl.value='';
   document.getElementById('input-notes').value='';
   document.getElementById('color-custom-input').value='';
   document.querySelectorAll('.qchip').forEach(c=>c.classList.remove('picked'));
   document.querySelectorAll('.craft-qty-card').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('.qty-display').forEach(function(el){el.textContent='0';});
-  document.getElementById('gift-subq').style.display='none';
-  document.getElementById('gift-name-subq').style.display='none';
   ['btn-0','btn-1','btn-2','btn-3','btn-4'].forEach(id=>{
     var b=document.getElementById(id); if(b) b.disabled=true;
   });
   /* Reset any name-interpolated UI so the next quiz starts fresh */
   document.querySelectorAll('.quiz-name-inline').forEach(el=>{el.textContent='';});
   var s1q = document.getElementById('s1-q');
-  if(s1q) s1q.innerHTML = 'And <span class="qhi-pink">who</span> are you<br>crafting with?';
+  if(s1q) s1q.innerHTML = 'What\'s the <span class="qhi-pink">occasion?</span>';
   /* Clear result page name slots too */
   document.querySelectorAll('.result-name').forEach(el=>{el.textContent='';});
   setQuizBg('default');
@@ -2265,11 +2451,10 @@ function goToSlide(n){
     if(i===n) s.classList.add('active');
     else if(i<n) s.classList.add('exit');
   });
-  var slideN = n;
-  // Adjust counter labels based on whether slide-2 is shown
-  var skip = (S.scene==='date'||S.scene==='self'||S.scene==='surprise'||S.scene==='gift') ? 1 : 0;
-  var total = 6 - skip;
-  var shown = n <= 2 ? n : n - skip;
+  // Counter: S2 is always skipped (qty handled in craft picker), so total = 5
+  // n=0→1, n=1→2, n=3→3, n=4→4, n=5→5
+  var total = 5;
+  var shown = (n >= 3) ? n : (n + 1);
   if(shown > total) shown = total;
   function pad(x){ return x<10?'0'+x:String(x); }
   var counters = {
@@ -2280,15 +2465,6 @@ function goToSlide(n){
   Object.entries(counters).forEach(([id,val])=>{
     var el=document.getElementById(id); if(el) el.textContent = val;
   });
-
-  // Update slide-4 text based on gift scene
-  if(n===4){
-    var isGift = S.scene==='gift';
-    var pronoun = isGift ? (S.giftFor==='him'?'his':S.giftFor==='her'?'her':'their') : 'your';
-    document.getElementById('s4-q').innerHTML=(isGift?'<span class="qhi-pink">Their</span> style preferences':'Your <span class="qhi-purple">style</span> preferences');
-    document.getElementById('s4-sub').textContent=(isGift?'Tell us a little about the person you\'re gifting — we\'ll tailor the colours and feel to them.':'This helps us personalise the colours and pace of your blind box.');
-    document.getElementById('s4-color-label').innerHTML='🎨 '+(isGift?'Their favourite colour palette':'Favourite colour palette');
-  }
   setProgress(n/(TOTAL_SLIDES-1));
   if(n===6) startLoading();
   if(n===7) buildResult();
@@ -2320,48 +2496,18 @@ function onNameInput(){
   S.name=v;
   document.getElementById('btn-0').disabled=!v;
   document.querySelectorAll('.quiz-name-inline').forEach(el=>el.textContent=v?v:'');
-  document.getElementById('s1-q').innerHTML='And <span class="qhi-pink">who</span> are you<br>crafting with'+(v?', '+v:'')+'?';
-  // (Surprise scene chip removed — blind box already includes the surprise factor)
 }
 document.getElementById('input-name').addEventListener('keydown',function(e){if(e.key==='Enter'&&S.name)goNext(0);});
 
-// S1 scene
+// S1 scene (occasion)
 function pickScene(s,el){
   S.scene=s;
   S.size='';
-  S.giftFor='';
   document.querySelectorAll('#scene-chips .qchip').forEach(c=>c.classList.remove('picked'));
   el.classList.add('picked');
   setQuizBg(s);
-  // update S2 question text
   document.getElementById('s2-q').innerHTML='How many people<br>are <em>joining in?</em>';
-  // Show/hide gift sub-question
-  var giftSubq = document.getElementById('gift-subq');
-  if(s==='gift'){
-    giftSubq.style.display='block';
-    // require giftFor before enabling Continue
-    document.querySelectorAll('#giftfor-chips .qchip').forEach(c=>c.classList.remove('picked'));
-    document.getElementById('btn-1').disabled=true;
-  } else {
-    giftSubq.style.display='none';
-    document.getElementById('gift-name-subq').style.display='none';
-    document.getElementById('btn-1').disabled=false;
-  }
-}
-function pickGiftFor(who,el){
-  S.giftFor=who;
-  document.querySelectorAll('#giftfor-chips .qchip').forEach(c=>c.classList.remove('picked'));
-  el.classList.add('picked');
-  // Show name input; keep Continue disabled until name is entered
-  document.getElementById('gift-name-subq').style.display='block';
-  setTimeout(function(){document.getElementById('input-gift-name').focus();},80);
-  var nm = document.getElementById('input-gift-name').value.trim();
-  document.getElementById('btn-1').disabled = !nm;
-}
-function onGiftNameInput(){
-  var nm = document.getElementById('input-gift-name').value.trim();
-  S.giftRecipientName = nm;
-  document.getElementById('btn-1').disabled = !(nm && S.giftFor);
+  document.getElementById('btn-1').disabled=false;
 }
 
 // S2 size
@@ -2386,7 +2532,7 @@ function pickCraft(id){
   document.getElementById('btn-3').disabled=(S.crafts.length===0);
 }
 
-// S4 colour + duration
+// S4 colour
 function pickColor(c,el){
   S.color=c;
   document.querySelectorAll('#color-chips .qchip').forEach(x=>x.classList.remove('picked'));
@@ -2401,24 +2547,32 @@ function onColorCustom(){
   }
   checkS4();
 }
-function pickTime(t,el){
-  S.duration=t;
-  document.querySelectorAll('#time-chips .qchip').forEach(x=>x.classList.remove('picked'));
-  el.classList.add('picked');
-  checkS4();
-}
 function checkS4(){
   var hasColor = S.color||S.colorCustom;
-  var hasTime = S.duration;
-  document.getElementById('btn-4').disabled=!(hasColor&&hasTime);
+  document.getElementById('btn-4').disabled=!hasColor;
+}
+
+// S5 optional — MBTI, zodiac, adjectives (all optional, no validation)
+function pickMbti(m,el){
+  S.mbti = (S.mbti===m) ? '' : m;
+  document.querySelectorAll('#mbti-chips .qchip').forEach(c=>c.classList.remove('picked'));
+  if(S.mbti) el.classList.add('picked');
+}
+function pickZodiac(z,el){
+  S.zodiac = (S.zodiac===z) ? '' : z;
+  document.querySelectorAll('#zodiac-chips .qchip').forEach(c=>c.classList.remove('picked'));
+  if(S.zodiac) el.classList.add('picked');
+}
+function onAdjInput(){
+  var v=document.getElementById('input-adjectives').value.trim();
+  S.adjectives=v;
 }
 
 /* ════════════════════════════════════════════════
    LOADING ANIMATION
 ════════════════════════════════════════════════ */
 function startLoading(){
-  var displayName = (S.scene==='gift' && S.giftRecipientName) ? S.giftRecipientName : S.name;
-  document.getElementById('loading-name').textContent=displayName;
+  document.getElementById('loading-name').textContent=S.name;
   var steps=document.querySelectorAll('.lstep');
   steps.forEach(function(s){s.classList.remove('show','done');});
   // Stagger steps across ~16s video
@@ -2452,14 +2606,7 @@ function buildResult(){
     '<div class="result-scene-tag" style="background:'+sc.color+'">'+sc.label+'</div>';
 
   // Headline
-  if(S.scene==='gift'){
-    var recipName = S.giftRecipientName || (S.giftFor==='him'?'him':S.giftFor==='her'?'her':'them');
-    document.getElementById('result-h').innerHTML=
-      'Take a peek now!';
-  } else {
-    document.getElementById('result-h').innerHTML=
-      'Take a peek now!';
-  }
+  document.getElementById('result-h').innerHTML='Take a peek now!';
   document.getElementById('result-sub').textContent="This is only a preview of your actual blind box.";
 
   // Items — restore v11 style preview
@@ -2480,6 +2627,22 @@ function buildResult(){
     items.appendChild(d);
   });
   /* magic-box "Something we're adding just for you" — removed in v13 */
+
+  // Persona reading card — only renders if MBTI or zodiac was given
+  var reading = computeReading(S);
+  var prEl = document.getElementById('persona-reading');
+  if(prEl){
+    if(reading.show){
+      document.getElementById('pr-text').textContent = reading.readingText;
+      document.getElementById('pr-scent').textContent = reading.scent.name;
+      document.getElementById('pr-tea').textContent = reading.tea.name;
+      document.getElementById('pr-color').textContent = reading.color.name;
+      document.getElementById('pr-color-swatch').style.background = reading.color.hex;
+      prEl.style.display = '';
+    } else {
+      prEl.style.display = 'none';
+    }
+  }
 
   // Result image — kit box image per selected craft
   var imgWrap=document.getElementById('result-img-wrap');
@@ -2511,13 +2674,14 @@ function buildResult(){
   var discountAmt=Math.round(craftSubtotal*discountPct);
   var craftAfter=craftSubtotal-discountAmt;
   var grandTotal=craftAfter+CURATION_FEE;
+  _currentGrandTotal = grandTotal;  // expose raw total for snapshot
   // Build price breakdown
   var priceEl=document.getElementById('result-price');
-  priceEl.textContent='$'+grandTotal;
+  priceEl.textContent=fmtPrice(grandTotal);
   /* v14 — also set the pre-sale discounted price */
   var presaleEl=document.getElementById('result-presale-price');
   if(presaleEl && typeof applyPreSaleDiscount==='function'){
-    presaleEl.textContent='$'+applyPreSaleDiscount(grandTotal);
+    presaleEl.textContent=fmtPrice(applyPreSaleDiscount(grandTotal));
   }
   // Show breakdown label
   var priceRow=priceEl.parentElement;
@@ -2710,9 +2874,9 @@ function renderPreSaleBanner(){
 renderPreSaleBanner();
 setInterval(renderPreSaleBanner, 1000);
 
-/* Helper — apply pre-sale discount */
+/* Helper — apply pre-sale discount (returns unrounded decimal; fmtPrice charm-rounds at display) */
 function applyPreSaleDiscount(price){
-  return Math.round(price * (1 - PRE_SALE_DISCOUNT));
+  return price * (1 - PRE_SALE_DISCOUNT);
 }
 
 /* Stripe Payment Links — NOT USED in v14 pre-sale (kept for post-launch). */
@@ -2751,12 +2915,10 @@ function buildOrderSnapshot(){
     });
   }
   var colorLabels={pastel:'Soft pastels',warm:'Warm tones',cool:'Cool tones',bold:'Bold & colourful'};
-  var timeLabels={'30':'Quick — under 30 min','60':'About an hour','2h':'A relaxed 2 hours','half':'Half a day'};
   var colorLabel=colorLabels[S&&S.color]||(S&&S.colorCustom)||'—';
-  var timeLabel=timeLabels[S&&S.duration]||'—';
 
-  /* Parse retail price from priceText like "$88" */
-  var retailPrice = parseInt((priceText||'').replace(/[^0-9]/g,''),10) || 0;
+  /* Use the raw numeric total set during buildResult so decimals aren't truncated */
+  var retailPrice = _currentGrandTotal || 0;
   var preSalePrice = applyPreSaleDiscount(retailPrice);
 
   return {
@@ -2770,10 +2932,13 @@ function buildOrderSnapshot(){
     craftCodes: craftCodes,
     totalQty: totalQty,
     colorLabel: colorLabel,
-    timeLabel: timeLabel,
     customerQuizName: (S&&S.name)||'',
     quizNotes: (S&&S.notes)||'',
-    who: (S&&S.giftFor)||(S&&S.size)||''
+    mbti: (S&&S.mbti)||'',
+    zodiac: (S&&S.zodiac)||'',
+    adjectives: (S&&S.adjectives)||'',
+    reading: (typeof computeReading==='function') ? computeReading(S) : null,
+    who: (S&&S.size)||''
   };
 }
 
@@ -2812,16 +2977,26 @@ function openReserveModal(){
     setText('rs-scene', o.sceneLabel);
     setText('rs-crafts', o.selectionsText);
     setText('rs-palette', o.colorLabel);
-    setText('rs-pace', o.timeLabel);
-    setText('rs-retail', '$' + o.retailPrice);
-    setText('rs-presale', '$' + o.preSalePrice);
+    // "Your reading" teaser: shows zodiac + MBTI if either were answered
+    var vibeBits = [];
+    if(o.zodiac) vibeBits.push(o.zodiac.charAt(0).toUpperCase()+o.zodiac.slice(1));
+    if(o.mbti) vibeBits.push(o.mbti);
+    var vibeRow=document.getElementById('rs-vibe-row');
+    if(vibeBits.length){ setText('rs-vibe', vibeBits.join(' · ')); if(vibeRow) vibeRow.style.display=''; }
+    else { if(vibeRow) vibeRow.style.display='none'; }
+    setText('rs-retail', fmtPrice(o.retailPrice));
+    setText('rs-presale', fmtPrice(o.preSalePrice));
     setText('rs-box-preview', (PRE_SALE_RESERVED + 1));
 
     /* Reset form */
-    ['rsv-email','rsv-firstname','rsv-zip','rsv-msg'].forEach(function(id){
+    ['rsv-email','rsv-firstname','rsv-zip','rsv-msg','rsv-gift-name','rsv-gift-note'].forEach(function(id){
       var el = document.getElementById(id);
       if(el){ el.value=''; el.style.borderColor=''; }
     });
+    /* Reset gift toggle + sub-fields */
+    var giftCb = document.getElementById('rsv-is-gift');
+    if(giftCb){ giftCb.checked = false; toggleGiftFields(); }
+    window._rsvGiftFor = '';
 
     var formState=document.getElementById('reserve-form-state');
     var successState=document.getElementById('reserve-success-state');
@@ -2849,7 +3024,7 @@ function openReservedPage(data){
   setT('rp-name', data.firstName);
   setT('rp-email', data.email);
   var priceLine = document.getElementById('rp-price-line');
-  if(priceLine && data.presalePrice) priceLine.textContent = '15% off (~$' + data.presalePrice + ' total)';
+  if(priceLine && data.presalePrice) priceLine.textContent = '15% off (~' + fmtPrice(data.presalePrice) + ' total)';
   page.classList.add('open');
   document.body.classList.add('overlay-active');
   document.body.style.overflow = 'hidden';
@@ -2901,6 +3076,27 @@ function closeReserveModal(){
   });
 })();
 
+/* Reservation-modal gift handlers (separate from quiz; gift now lives here in v14+) */
+function toggleGiftFields(){
+  var checked = document.getElementById('rsv-is-gift').checked;
+  document.getElementById('rsv-gift-fields').style.display = checked ? '' : 'none';
+  if(!checked){
+    // Clear gift data when unchecked
+    window._rsvGiftFor = '';
+    var nm=document.getElementById('rsv-gift-name'); if(nm) nm.value='';
+    var gn=document.getElementById('rsv-gift-note'); if(gn) gn.value='';
+    document.querySelectorAll('#rsv-gift-fields .qchip').forEach(c=>c.classList.remove('picked'));
+  }
+}
+function pickRsvGiftFor(who,el){
+  window._rsvGiftFor = who;
+  document.querySelectorAll('#rsv-gift-fields .qchip').forEach(c=>c.classList.remove('picked'));
+  el.classList.add('picked');
+}
+function onRsvGiftNameInput(){
+  // no-op — we read value at submit time
+}
+
 /* v14 — PRE-SALE RESERVATION (no Stripe, just Formspree + box number + success state) */
 function proceedToCheckout(){
   var o = _lastOrder || buildOrderSnapshot();
@@ -2918,6 +3114,12 @@ function proceedToCheckout(){
   var firstName = (firstNameInput.value||'').trim();
   var zip = (zipInput.value||'').trim();
   var notes = (notesInput && notesInput.value)||'';
+
+  /* Gift data (only if the gift checkbox is ticked) */
+  var isGift = !!document.getElementById('rsv-is-gift').checked;
+  var giftFor = isGift ? (window._rsvGiftFor || '') : '';
+  var giftName = isGift ? ((document.getElementById('rsv-gift-name').value||'').trim()) : '';
+  var giftNote = isGift ? ((document.getElementById('rsv-gift-note').value||'').trim()) : '';
 
   /* Honeypot: if a bot fills the hidden _gotcha field, silently "succeed" (don't submit) */
   var honeypot = formEl.querySelector('input[name="_gotcha"]');
@@ -2954,11 +3156,24 @@ function proceedToCheckout(){
     'Crafts: ' + o.selectionsText,
     'Total qty: ' + o.totalQty,
     'Colour palette: ' + o.colorLabel,
-    'Pace: ' + o.timeLabel,
+    'MBTI: ' + (o.mbti || '—'),
+    'Zodiac: ' + (o.zodiac || '—'),
+    'Adjectives: ' + (o.adjectives || '—'),
+    '',
+    '── PACKING GUIDE (persona reading) ──',
+    'Scent / hand cream: ' + (o.reading && o.reading.scent ? o.reading.scent.name : '—'),
+    'Tea: ' + (o.reading && o.reading.tea ? o.reading.tea.name : '—'),
+    'Luck color: ' + (o.reading && o.reading.color ? o.reading.color.name + ' (' + o.reading.color.hex + ')' : '—'),
+    'Reading text (on their card): ' + (o.reading ? o.reading.readingText : '—'),
+    '',
     'Quiz name: ' + (o.customerQuizName || '(same as reservation name)'),
     '',
-    'Retail: $' + o.retailPrice,
-    'Pre-sale price (UNFOLD15 applied): $' + o.preSalePrice,
+    'GIFT? ' + (isGift ? 'YES' : 'no'),
+    (isGift ? 'Gift for: ' + (giftFor || '—') + ' (' + (giftName || '—') + ')' : ''),
+    (isGift ? 'Handwritten note: ' + (giftNote || '(none requested)') : ''),
+    '',
+    'Retail: ' + fmtPrice(o.retailPrice),
+    'Pre-sale price (UNFOLD15 applied): ' + fmtPrice(o.preSalePrice),
     '',
     'Customer quiz notes:',
     (o.quizNotes || '(none)'),
@@ -2969,7 +3184,7 @@ function proceedToCheckout(){
     'Next steps:',
     '1. Increment PRE_SALE_RESERVED_BASE in v14 so scarcity counter updates',
     '2. Reply to this email with welcome + 15% code promise',
-    '3. On July 4 launch: email customer a Stripe Payment Link for $' + o.preSalePrice + ' with UNFOLD15 discount'
+    '3. On July 4 launch: email customer a Stripe Payment Link for ' + fmtPrice(o.preSalePrice) + ' with UNFOLD15 discount'
   ].join('\n');
 
   var data = {
@@ -2985,10 +3200,20 @@ function proceedToCheckout(){
     scene: o.sceneLabel,
     crafts: o.selectionsText,
     total_qty: String(o.totalQty),
-    retail_price: '$' + o.retailPrice,
-    presale_price: '$' + o.preSalePrice,
+    retail_price: fmtPrice(o.retailPrice),
+    presale_price: fmtPrice(o.preSalePrice),
     colour: o.colorLabel,
-    pace: o.timeLabel,
+    mbti: o.mbti,
+    zodiac: o.zodiac,
+    adjectives: o.adjectives,
+    reading_scent: (o.reading && o.reading.scent) ? o.reading.scent.name : '',
+    reading_tea: (o.reading && o.reading.tea) ? o.reading.tea.name : '',
+    reading_color: (o.reading && o.reading.color) ? o.reading.color.name : '',
+    reading_text: o.reading ? o.reading.readingText : '',
+    is_gift: isGift ? 'yes' : 'no',
+    gift_for: giftFor,
+    gift_recipient_name: giftName,
+    gift_note: giftNote,
     quiz_name: o.customerQuizName,
     quiz_notes: o.quizNotes,
     reservation_notes: notes,
@@ -3023,7 +3248,7 @@ function proceedToCheckout(){
         presalePrice: o.preSalePrice
       });
     } else {
-      alert('Something went wrong. Please try again or email zoraliu97@gmail.com directly.');
+      alert('Something went wrong. Please try again or email hello@afternoon-unfold.com directly.');
       submitBtn.textContent = 'Reserve my spot →';
       submitBtn.disabled = false;
     }
@@ -3035,13 +3260,18 @@ function proceedToCheckout(){
 }
 
 /* Build a compact order code for Stripe's client_reference_id
-   e.g. "pb2sy1-pastel-30-ZORA" — appears in Stripe dashboard for each payment */
+   e.g. "pb2sy1-pastel-infj-scorpio-ZORA" — appears in Stripe dashboard for each payment */
 function buildRefId(o, name){
   var crafts = (o.craftCodes||[]).join('');
   var palette = (o.colorLabel||'').split(' ')[0].toLowerCase();
-  var pace = (o.timeLabel||'').split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g,'');
+  var mbti = (o.mbti||'').toLowerCase();
+  var zodiac = (o.zodiac||'').slice(0,4);  // first 4 chars keeps it short
   var n = (name||'').trim().toUpperCase().replace(/[^A-Z]/g,'').slice(0,10);
-  return (crafts || 'X') + '-' + palette + '-' + pace + (n?('-'+n):'');
+  var parts = [crafts||'X', palette];
+  if(mbti) parts.push(mbti);
+  if(zodiac) parts.push(zodiac);
+  if(n) parts.push(n);
+  return parts.join('-');
 }
 window.addEventListener('resize',function(){
   if(document.getElementById('result-img-container') && document.getElementById('result-img-container').offsetParent){
