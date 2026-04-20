@@ -952,19 +952,25 @@ footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.
 /* Modal prize line */
 .reserve-prize-line{background:linear-gradient(90deg,rgba(196,147,106,0.12) 0%,rgba(185,79,99,0.08) 100%);border:1px solid rgba(196,147,106,0.3);padding:10px 14px;margin:0 0 18px;font-size:12.5px;color:#3A2E24;letter-spacing:0.01em;line-height:1.5;}
 .reserve-prize-line strong{color:#B94F63;font-weight:600;}
-/* Floating Founder's Prize tab — right edge, vertical ribbon, gold & magnetic */
-.prize-float{position:fixed;right:0;top:42%;transform:translate(0,-50%);z-index:320;background:linear-gradient(180deg,#F5D08A 0%,#D9A557 45%,#B08340 100%);color:#3A2508;border:1px solid #8A6034;border-right:none;padding:16px 14px 18px;box-shadow:-8px 10px 30px -10px rgba(142,92,40,0.55),-3px 4px 10px -3px rgba(142,92,40,0.35);cursor:pointer;transition:transform 0.28s cubic-bezier(0.2,0.9,0.2,1),box-shadow 0.28s ease;font-family:'Raleway',sans-serif;text-align:center;user-select:none;}
-.prize-float:hover{transform:translate(-4px,-50%);box-shadow:-12px 14px 38px -10px rgba(142,92,40,0.65),-5px 6px 14px -4px rgba(142,92,40,0.45);}
-.prize-float .pf-star{font-size:18px;color:#8A6034;margin-bottom:6px;line-height:1;animation:pfPulse 2.8s ease-in-out infinite;}
-@keyframes pfPulse{0%,100%{opacity:0.75;transform:scale(1);}50%{opacity:1;transform:scale(1.15);}}
-.prize-float .pf-label{font-family:'Cormorant',serif;font-size:14px;line-height:1.05;color:#3A2508;font-weight:500;font-style:italic;margin-bottom:6px;letter-spacing:0.01em;}
-.prize-float .pf-tease{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#6B4422;font-weight:600;}
+/* Floating Founder's Prize — rosette + ribbon-tails SVG on the right edge.
+   On hover, the hidden copy slides in from the right so the rosette
+   always stays visible. Bottom-right on mobile. */
+.prize-float{position:fixed;right:18px;top:40%;transform:translateY(-50%);z-index:320;cursor:pointer;display:flex;align-items:center;gap:12px;user-select:none;font-family:'Raleway',sans-serif;}
+.prize-float .pf-rosette{width:68px;height:92px;filter:drop-shadow(0 6px 14px rgba(142,92,40,0.35)) drop-shadow(0 2px 4px rgba(142,92,40,0.25));transition:transform 0.35s cubic-bezier(0.2,0.9,0.2,1);animation:pfSway 4s ease-in-out infinite;}
+.prize-float .pf-svg{display:block;width:100%;height:100%;}
+.prize-float .pf-copy{background:var(--parchment);border:1px solid rgba(196,147,106,0.5);padding:8px 12px 8px 14px;box-shadow:0 8px 22px -10px rgba(142,92,40,0.4);transform:translateX(-8px);opacity:0;pointer-events:none;transition:transform 0.3s ease,opacity 0.3s ease;max-width:0;overflow:hidden;white-space:nowrap;display:flex;flex-direction:column;gap:2px;}
+.prize-float:hover .pf-copy,
+.prize-float:focus-visible .pf-copy{transform:translateX(0);opacity:1;max-width:260px;}
+.prize-float:hover .pf-rosette{transform:rotate(-6deg) scale(1.05);}
+.prize-float .pf-k{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#8A6034;font-weight:700;}
+.prize-float .pf-v{font-family:'Cormorant',serif;font-style:italic;font-size:14.5px;color:var(--ink);}
+@keyframes pfSway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
 body.overlay-active .prize-float{display:none;}
-#prize-modal.open ~ .prize-float, .prize-float[aria-hidden="true"]{display:none;}
 @media (max-width:640px){
-  .prize-float{top:auto;bottom:18px;right:0;transform:none;padding:12px 10px 14px;}
-  .prize-float:hover{transform:translateX(-3px);}
-  .prize-float .pf-label{font-size:12.5px;}
+  .prize-float{top:auto;bottom:18px;right:14px;transform:none;gap:0;}
+  .prize-float .pf-rosette{width:56px;height:76px;}
+  .prize-float:hover .pf-copy,
+  .prize-float:focus-visible .pf-copy{max-width:0;opacity:0;}
 }
 
 /* Founder's Prize detail modal — sealed visual teaser with big ? */
@@ -980,9 +986,9 @@ body.overlay-active .prize-float{display:none;}
 .prize-modal-h em{font-style:normal;color:#B94F63;}
 .prize-modal-sub{font-size:13.5px;color:var(--dust);line-height:1.65;margin-bottom:1.4rem;position:relative;padding:0 0.5rem;}
 /* Blurred teaser "image" — made entirely with CSS so no asset needed */
-.prize-teaser{position:relative;width:100%;aspect-ratio:4/3;margin:0 0 1.25rem;overflow:hidden;border:1px solid rgba(196,147,106,0.3);}
-.prize-teaser .pt-backdrop{position:absolute;inset:0;background:radial-gradient(circle at 38% 42%,#9FB594 0%,#6A8266 30%,#3C4D3A 60%,#1E2B1D 100%);filter:blur(18px) saturate(1.15);transform:scale(1.15);}
-.prize-teaser::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,transparent 30%,rgba(0,0,0,0.4) 100%);pointer-events:none;}
+.prize-teaser{position:relative;width:100%;aspect-ratio:4/3;margin:0 0 1.25rem;overflow:hidden;border:1px solid rgba(196,147,106,0.3);background:#2B3B28;}
+.prize-teaser .pt-matcha{position:absolute;inset:0;width:100%;height:100%;display:block;filter:blur(14px) saturate(1.1) brightness(0.95);transform:scale(1.1);}
+.prize-teaser::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 20%,rgba(0,0,0,0.35) 85%);pointer-events:none;z-index:1;}
 .prize-teaser .pt-q{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant',serif;font-size:140px;font-weight:500;color:#FFE8B8;text-shadow:0 4px 32px rgba(217,165,87,0.6),0 2px 12px rgba(0,0,0,0.5);line-height:1;z-index:2;}
 .prize-teaser .pt-hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,232,184,0.85);font-weight:600;z-index:2;text-shadow:0 2px 8px rgba(0,0,0,0.6);}
 .prize-modal-meta{background:var(--white);border:1px solid var(--border);padding:14px 16px;margin-bottom:1.2rem;font-size:13px;position:relative;}
@@ -1166,15 +1172,89 @@ body.overlay-active #main-nav{top:0;}
 #reserved-page .rp-next li::before{content:'';position:absolute;left:4px;top:14px;width:6px;height:6px;border-radius:50%;background:#B94F63;opacity:0.5;}
 #reserved-page .rp-next li strong{color:var(--ink);font-weight:600;}
 #reserved-page .rp-next li code{background:rgba(185,79,99,0.12);padding:2px 7px;border-radius:3px;font-family:inherit;color:#8E3A4E;font-weight:600;font-size:0.92em;}
-#reserved-page .rp-prize{background:linear-gradient(155deg,rgba(196,147,106,0.1) 0%,rgba(185,79,99,0.06) 100%);border:1px solid rgba(196,147,106,0.32);padding:1.6rem 1.8rem 1.5rem;margin:0 auto 1.75rem;max-width:480px;text-align:center;position:relative;}
-#reserved-page .rp-prize::before{content:'';position:absolute;top:8px;left:8px;right:8px;bottom:8px;border:1px solid rgba(196,147,106,0.18);pointer-events:none;}
-#reserved-page .rp-prize-badge{display:inline-block;padding:4px 14px;border:1px solid var(--gold);color:var(--gold);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;margin-bottom:14px;background:var(--white);position:relative;}
-#reserved-page .rp-prize-h{font-family:'Cormorant',serif;font-size:1.35rem;font-weight:500;color:var(--ink);line-height:1.35;margin-bottom:10px;position:relative;}
-#reserved-page .rp-prize-h em{font-style:normal;color:#B94F63;}
-#reserved-page .rp-prize-sub{font-size:13.5px;color:var(--dust);line-height:1.7;margin-bottom:10px;position:relative;}
-#reserved-page .rp-prize-sub em{font-style:italic;color:var(--ink);}
-#reserved-page .rp-prize-sub strong{color:var(--ink);font-weight:600;}
-#reserved-page .rp-prize-fine{font-size:12px;color:var(--dust);line-height:1.6;margin:0;font-style:italic;position:relative;opacity:0.8;}
+/* Golden ticket — success-page prize card. Richer gold gradient, double
+   "foil" border, notched ticket edges (via pseudo-element cutouts),
+   slow shimmer across the surface. */
+#reserved-page .rp-prize{
+  background:linear-gradient(135deg,#FFF3C4 0%,#FCD98B 30%,#E6BA58 55%,#CFA041 80%,#B8892F 100%);
+  border:1px solid #8A6034;
+  padding:1.8rem 2rem 1.6rem;
+  margin:0 auto 1.75rem;
+  max-width:480px;
+  text-align:center;
+  position:relative;
+  color:#3A2508;
+  box-shadow:0 18px 38px -16px rgba(142,92,40,0.55),0 4px 12px -4px rgba(142,92,40,0.35),inset 0 1px 0 rgba(255,255,255,0.4);
+  overflow:hidden;
+  isolation:isolate;
+}
+/* Inner double-frame foil border */
+#reserved-page .rp-prize::before{
+  content:'';
+  position:absolute;top:8px;left:8px;right:8px;bottom:8px;
+  border:1px solid rgba(106,68,34,0.45);
+  box-shadow:inset 0 0 0 2px rgba(255,240,200,0.4);
+  pointer-events:none;
+  z-index:0;
+}
+/* Slow diagonal shimmer */
+#reserved-page .rp-prize::after{
+  content:'';
+  position:absolute;top:-50%;left:-50%;width:50%;height:200%;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,230,0.55) 50%,transparent 70%);
+  transform:translateX(0) rotate(14deg);
+  animation:rpShimmer 5.5s ease-in-out infinite;
+  pointer-events:none;
+  z-index:1;
+}
+@keyframes rpShimmer{
+  0%,100%{transform:translateX(-40%) rotate(14deg);opacity:0.5;}
+  50%{transform:translateX(260%) rotate(14deg);opacity:0.85;}
+}
+#reserved-page .rp-prize-badge{
+  display:inline-block;
+  padding:5px 14px;
+  border:1px solid #6B4422;
+  color:#3A2508;
+  font-family:'Raleway',sans-serif;
+  font-size:10px;
+  letter-spacing:0.32em;
+  text-transform:uppercase;
+  font-weight:700;
+  margin-bottom:14px;
+  background:rgba(255,244,205,0.8);
+  position:relative;z-index:2;
+  box-shadow:0 1px 0 rgba(255,255,255,0.6) inset;
+}
+#reserved-page .rp-prize-h{
+  font-family:'Cormorant',serif;
+  font-size:1.55rem;
+  font-weight:500;
+  color:#3A2508;
+  line-height:1.3;
+  margin-bottom:10px;
+  position:relative;z-index:2;
+  text-shadow:0 1px 0 rgba(255,255,255,0.4);
+}
+#reserved-page .rp-prize-h em{font-style:italic;color:#7A3A3F;}
+#reserved-page .rp-prize-sub{
+  font-size:13.5px;
+  color:#4A3420;
+  line-height:1.7;
+  margin-bottom:10px;
+  position:relative;z-index:2;
+}
+#reserved-page .rp-prize-sub em{font-style:italic;color:#3A2508;}
+#reserved-page .rp-prize-sub strong{color:#3A2508;font-weight:700;}
+#reserved-page .rp-prize-fine{
+  font-size:12px;
+  color:#6B4422;
+  line-height:1.6;
+  margin:0;
+  font-style:italic;
+  position:relative;z-index:2;
+  opacity:0.9;
+}
 #reserved-page .rp-social{font-size:13px;color:var(--dust);line-height:1.7;margin-bottom:2rem;}
 #reserved-page .rp-social a{color:#B94F63;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(185,79,99,0.3);}
 #reserved-page .rp-social a:hover{border-bottom-color:#B94F63;}
@@ -1810,26 +1890,111 @@ function submitPromo(e,variant){
 })();
 </script>
 
-<!-- Floating Founder's Prize tab — right edge of the page, tactile gold ribbon.
-     Click opens a full-screen detail modal with a sealed / blurred teaser. -->
+<!-- Floating Founder's Prize rosette — award ribbon shape on right edge.
+     Click opens a full-screen detail modal with the blurred matcha teaser. -->
 <div class="prize-float" id="prize-float" onclick="openPrizeModal()" role="button" tabindex="0" aria-label="View Founder's Prize">
-  <div class="pf-star">✦</div>
-  <div class="pf-label">Founder's<br>Prize</div>
-  <div class="pf-tease">reveal &rarr;</div>
+  <div class="pf-rosette">
+    <svg class="pf-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="pf-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#FBE8A8"/>
+          <stop offset="45%" stop-color="#E6C878"/>
+          <stop offset="100%" stop-color="#B08340"/>
+        </linearGradient>
+        <linearGradient id="pf-gold-dark" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#D4A94A"/>
+          <stop offset="100%" stop-color="#8A6034"/>
+        </linearGradient>
+        <radialGradient id="pf-center" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#FFF4CE"/>
+          <stop offset="100%" stop-color="#E6C878"/>
+        </radialGradient>
+      </defs>
+      <!-- Two ribbon tails hanging down, behind the rosette -->
+      <path d="M42 70 L32 150 L46 138 L52 152 L58 138 Z" fill="url(#pf-gold-dark)" stroke="#6B4422" stroke-width="0.8"/>
+      <path d="M78 70 L88 150 L74 138 L68 152 L62 138 Z" fill="url(#pf-gold-dark)" stroke="#6B4422" stroke-width="0.8"/>
+      <!-- Rosette: starburst outer + flat inner circle -->
+      <g transform="translate(60,54)">
+        <!-- 20-point starburst (rosette pleats) -->
+        <path d="M 0,-46 L 6,-38 L 14,-42 L 16,-33 L 25,-33 L 22,-24 L 32,-20 L 26,-13 L 38,-6 L 28,-3 L 42,6 L 31,9 L 38,20 L 27,20 L 30,32 L 19,27 L 18,38 L 10,30 L 3,42 L 0,32 L -3,42 L -10,30 L -18,38 L -19,27 L -30,32 L -27,20 L -38,20 L -31,9 L -42,6 L -28,-3 L -38,-6 L -26,-13 L -32,-20 L -22,-24 L -25,-33 L -16,-33 L -14,-42 L -6,-38 Z" fill="url(#pf-gold)" stroke="#8A6034" stroke-width="0.8"/>
+        <!-- Inner flat circle with rope border -->
+        <circle cx="0" cy="0" r="25" fill="url(#pf-center)" stroke="#B08340" stroke-width="1"/>
+        <circle cx="0" cy="0" r="21" fill="none" stroke="#C4936A" stroke-width="0.5" stroke-dasharray="1.5 1.5" opacity="0.7"/>
+        <!-- Central ✦ -->
+        <text x="0" y="7" text-anchor="middle" font-family="Cormorant, serif" font-size="28" font-weight="500" fill="#6B4422">✦</text>
+      </g>
+    </svg>
+  </div>
+  <div class="pf-copy">
+    <span class="pf-k">Founder's Prize</span>
+    <span class="pf-v">Matcha set — reveal &rarr;</span>
+  </div>
 </div>
 
-<!-- Founder's Prize detail modal — blurred teaser, opens on pill click -->
+<!-- Founder's Prize detail modal — blurred matcha teaser, opens on rosette click -->
 <div id="prize-modal" class="prize-modal" role="dialog" aria-labelledby="prize-modal-title">
   <div class="prize-modal-inner">
     <button class="prize-modal-close" type="button" onclick="closePrizeModal()" aria-label="Close">✕</button>
     <div class="prize-modal-eye">✦ Founder's Prize ✦</div>
-    <h2 class="prize-modal-h" id="prize-modal-title">For the <em>first 50 boxes</em> reserved</h2>
-    <p class="prize-modal-sub">You'll be automatically entered into a draw for a hand-curated premium prize. What it is stays sealed until launch.</p>
+    <h2 class="prize-modal-h" id="prize-modal-title">A premium <em>matcha ritual set</em></h2>
+    <p class="prize-modal-sub">For the first 50 boxes reserved: one of you wins a handmade ceramic bowl, bamboo whisk, scoop, and premium ceremonial matcha. The specific maker and palette stay sealed until launch day.</p>
 
-    <!-- Blurred "sealed" teaser image — CSS-composed, no photo needed.
-         The question mark sells the suspense. -->
+    <!-- Blurred matcha teaser: SVG bowl + whisk under a heavy blur + ? overlay -->
     <div class="prize-teaser" aria-hidden="true">
-      <div class="pt-backdrop"></div>
+      <svg class="pt-matcha" viewBox="0 0 280 210" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="mtcBg" cx="50%" cy="38%" r="70%">
+            <stop offset="0%" stop-color="#B8D4A3"/>
+            <stop offset="45%" stop-color="#7FA07A"/>
+            <stop offset="100%" stop-color="#3C553A"/>
+          </radialGradient>
+          <radialGradient id="mtcBowl" cx="50%" cy="55%" r="55%">
+            <stop offset="0%" stop-color="#A4B99C"/>
+            <stop offset="70%" stop-color="#708B68"/>
+            <stop offset="100%" stop-color="#3E5438"/>
+          </radialGradient>
+          <radialGradient id="mtcMatcha" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#A8C26C"/>
+            <stop offset="100%" stop-color="#5E7A3A"/>
+          </radialGradient>
+          <linearGradient id="mtcWhisk" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#C9A867"/>
+            <stop offset="100%" stop-color="#8A6034"/>
+          </linearGradient>
+        </defs>
+        <!-- Backdrop -->
+        <rect x="0" y="0" width="280" height="210" fill="url(#mtcBg)"/>
+        <!-- Wooden tray hint -->
+        <ellipse cx="140" cy="170" rx="110" ry="22" fill="#6B4422" opacity="0.35"/>
+        <!-- Whisk (chasen) on the left -->
+        <g transform="translate(58,60)">
+          <!-- Handle -->
+          <rect x="0" y="0" width="14" height="58" rx="2" fill="url(#mtcWhisk)"/>
+          <!-- Whisk bristles -->
+          <path d="M 0 58 Q -6 76 -2 98 M 3 58 Q 0 78 4 100 M 7 58 Q 7 80 9 100 M 11 58 Q 12 80 12 100 M 14 58 Q 18 78 16 100 M 14 58 Q 22 76 20 98" stroke="#D4B888" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <!-- Band around top of bristles -->
+          <rect x="-2" y="56" width="18" height="4" fill="#7A5A2E"/>
+        </g>
+        <!-- Bamboo scoop (chashaku) on the right -->
+        <g transform="translate(195,70) rotate(18)">
+          <rect x="0" y="0" width="50" height="5" rx="2" fill="url(#mtcWhisk)"/>
+          <path d="M50 2.5 Q60 0 62 5 Q60 10 50 5 Z" fill="#A8834A"/>
+        </g>
+        <!-- Matcha bowl (chawan) center -->
+        <g transform="translate(140,125)">
+          <!-- Outer bowl shape -->
+          <path d="M -60 -4 Q -58 34 -38 44 Q 0 52 38 44 Q 58 34 60 -4 Z" fill="url(#mtcBowl)" stroke="#3A4F36" stroke-width="1"/>
+          <!-- Inner rim -->
+          <ellipse cx="0" cy="-4" rx="60" ry="10" fill="#3E5438" opacity="0.9"/>
+          <!-- Matcha inside -->
+          <ellipse cx="0" cy="-4" rx="52" ry="8" fill="url(#mtcMatcha)"/>
+          <!-- Foam/froth hint -->
+          <ellipse cx="-12" cy="-5" rx="14" ry="3" fill="#D4E4A8" opacity="0.75"/>
+          <ellipse cx="14" cy="-4" rx="10" ry="2.5" fill="#C0D896" opacity="0.6"/>
+          <!-- Bowl texture hints -->
+          <path d="M -50 14 Q 0 22 50 14" stroke="#2E3F2B" stroke-width="0.8" opacity="0.4" fill="none"/>
+        </g>
+      </svg>
       <div class="pt-q">?</div>
       <div class="pt-hint">Sealed until July 4</div>
     </div>
@@ -2445,11 +2610,11 @@ function submitPromo(e,variant){
       </ul>
     </div>
 
-    <!-- Founder's Prize — automatic entry. Kept intentionally vague here;
-         the suspense belongs on the landing / modal, not the success page. -->
+    <!-- Founder's Prize — golden ticket feel. Names the prize (matcha set)
+         but keeps the specific maker/palette sealed. -->
     <div class="rp-prize">
       <div class="rp-prize-badge">✦ Founder's Prize</div>
-      <h3 class="rp-prize-h">You've been entered.</h3>
+      <h3 class="rp-prize-h">You've been entered — win a <em>premium matcha set</em></h3>
       <p class="rp-prize-sub">One winner drawn on <strong>July 4</strong>, the day your box ships. We'll announce via email and Instagram.</p>
     </div>
 
@@ -2590,20 +2755,57 @@ var PERSONA = {
     gemini:'air', libra:'air', aquarius:'air',
     cancer:'water', scorpio:'water', pisces:'water'
   },
-  // One-line astrology reading per sign — drawn from traditional archetypes
+  // Expanded astrology reading per sign — archetype + traits + two more
+  // layered sentences (gift + tell) so the body reads like a real reading.
   zodiacInfo: {
-    aries:      {name:'Aries',       archetype:'the pioneer',     traits:'bold, first-moving, and full of spark — you ignite rooms and start new things before anyone else'},
-    taurus:     {name:'Taurus',      archetype:'the sensualist',  traits:'grounded and patient, with a love for slow beauty and tactile luxury'},
-    gemini:     {name:'Gemini',      archetype:'the messenger',   traits:'curious and quick-witted, a mind that loves to wander and connect ideas'},
-    cancer:     {name:'Cancer',      archetype:'the nurturer',    traits:'tender-hearted and deeply intuitive, turning houses into homes'},
-    leo:        {name:'Leo',         archetype:'the warm-hearted',traits:'generous and dramatic, with a love that shows up in color, feast, and celebration'},
-    virgo:      {name:'Virgo',       archetype:'the craftsperson',traits:'thoughtful and precise, quiet care dressed as practicality'},
-    libra:      {name:'Libra',       archetype:'the aesthete',    traits:'harmonious and beauty-seeking, crafting elegance almost unconsciously'},
-    scorpio:    {name:'Scorpio',     archetype:'the alchemist',   traits:'persistent and deep, with intensity that holds a quiet pull toward romance'},
-    sagittarius:{name:'Sagittarius', archetype:'the seeker',      traits:'adventurous and philosophical, restless for the next horizon'},
-    capricorn:  {name:'Capricorn',   archetype:'the architect',   traits:'disciplined and patient, a builder who knows time is the secret ingredient'},
-    aquarius:   {name:'Aquarius',    archetype:'the visionary',   traits:'inventive and independent, seeing angles the rest of us miss'},
-    pisces:     {name:'Pisces',      archetype:'the dreamer',     traits:'imaginative and empathic, a soft soul with a deep inner world'}
+    aries: {name:'Aries', archetype:'the pioneer',
+      traits:'bold, first-moving, and full of spark — you ignite rooms and start new things before anyone else',
+      gift:'Your instinct is usually right; you trust it before thought has caught up.',
+      tell:'The energy you bring sparks other people into motion — they follow your lit fuse without quite knowing why.'},
+    taurus: {name:'Taurus', archetype:'the sensualist',
+      traits:'grounded and patient, with a love for slow beauty and tactile luxury',
+      gift:'You refuse to rush — and that\'s your quiet superpower. You wait for what\'s real.',
+      tell:'Beauty and texture feed you the way other people are fed by achievement; a small, well-made thing can make your day.'},
+    gemini: {name:'Gemini', archetype:'the messenger',
+      traits:'curious and quick-witted, a mind that loves to wander and connect ideas',
+      gift:'You collect ideas like other people collect souvenirs, and trade them generously in conversation.',
+      tell:'Your mind runs three threads at once — each one its own small adventure.'},
+    cancer: {name:'Cancer', archetype:'the nurturer',
+      traits:'tender-hearted and deeply intuitive, turning houses into homes',
+      gift:'You feel the room\'s weather before anyone else notices it shifting.',
+      tell:'Home is your love language — both the giving of it and the finding.'},
+    leo: {name:'Leo', archetype:'the warm-hearted',
+      traits:'generous and dramatic, with a love that shows up in colour, feast, and celebration',
+      gift:'You love out loud, and you don\'t apologize for the volume.',
+      tell:'Your joy is contagious — rooms brighten simply because you decided to be in them.'},
+    virgo: {name:'Virgo', archetype:'the craftsperson',
+      traits:'thoughtful and precise, with quiet care dressed as practicality',
+      gift:'You notice small, kind things other people miss — and you act on them without needing credit.',
+      tell:'Your mind holds order so the world can feel softer; that\'s care, not control.'},
+    libra: {name:'Libra', archetype:'the aesthete',
+      traits:'harmonious and beauty-seeking, crafting elegance almost unconsciously',
+      gift:'You balance without being asked — smoothing edges that others left sharp.',
+      tell:'Beauty matters to you the way honesty matters to some — it\'s a moral instinct.'},
+    scorpio: {name:'Scorpio', archetype:'the alchemist',
+      traits:'persistent and deep, with intensity that holds a quiet pull toward romance',
+      gift:'You see through surfaces — people feel known around you, sometimes before they\'re ready for it.',
+      tell:'You love deeply or not at all; there\'s no shallow version of a Scorpio heart.'},
+    sagittarius: {name:'Sagittarius', archetype:'the seeker',
+      traits:'adventurous and philosophical, restless for the next horizon',
+      gift:'You carry your own light wherever you go; home is a feeling you can pack up.',
+      tell:'You chase meaning the way other people chase certainty — and meaning almost always shows up.'},
+    capricorn: {name:'Capricorn', archetype:'the architect',
+      traits:'disciplined and patient, a builder who knows time is the secret ingredient',
+      gift:'You plant things for the long view — trees other people will sit under.',
+      tell:'Your patience looks like slowness from outside and architecture from inside.'},
+    aquarius: {name:'Aquarius', archetype:'the visionary',
+      traits:'inventive and independent, seeing angles the rest of us miss',
+      gift:'You ask the questions other people skipped because they looked too obvious to ask.',
+      tell:'Your independence isn\'t distance — it\'s the room where your ideas can actually breathe.'},
+    pisces: {name:'Pisces', archetype:'the dreamer',
+      traits:'imaginative and empathic, a soft soul with a deep inner world',
+      gift:'Your imagination is the real room — the one you come home to.',
+      tell:'You feel other people so fully that solitude, for you, is both a medicine and a choice.'}
   },
   // MBTI axis we use for color: the "N vs S" letter
   //   N (intuitive) → softer, dreamier variant of each element
@@ -2614,24 +2816,57 @@ var PERSONA = {
     ISTJ:'S', ISFJ:'S', ESTJ:'S', ESFJ:'S',
     ISTP:'S', ISFP:'S', ESTP:'S', ESFP:'S'
   },
-  // Per-type one-line character description (Keirsey temperaments, personalized)
+  // Expanded per-type character — tag + line + an extra reading sentence
+  // (how you move through the world) and a "tell" (what others feel near you)
   mbtiInfo: {
-    INTJ: {tag:'the Architect',    line:'strategic and quietly visionary — you build systems only you fully see'},
-    INTP: {tag:'the Logician',     line:'inventive and curious — you live for the elegant idea, the unsolved puzzle'},
-    ENTJ: {tag:'the Commander',    line:'decisive and ambitious — you see the endgame and walk toward it'},
-    ENTP: {tag:'the Debater',      line:'playful and sharp — your mind sparks on connection and contradiction'},
-    INFJ: {tag:'the Advocate',     line:'deeply empathic with a private inner world — you hold meaning in everything'},
-    INFP: {tag:'the Mediator',     line:'idealistic and gentle — you feel things in color and look for beauty everywhere'},
-    ENFJ: {tag:'the Protagonist',  line:'warm and inspiring — you read people closely and make them feel seen'},
-    ENFP: {tag:'the Campaigner',   line:'bright and possibility-led — your enthusiasm moves other people too'},
-    ISTJ: {tag:'the Logistician',  line:'steady and trustworthy — the quiet kind of person who actually finishes things'},
-    ISFJ: {tag:'the Defender',     line:'warm and attentive — the reason other people get to relax'},
-    ESTJ: {tag:'the Executive',    line:'organised and grounded — you make the invisible structure that holds a room together'},
-    ESFJ: {tag:'the Consul',       line:'generous and connected — you remember the small things that make people feel loved'},
-    ISTP: {tag:'the Virtuoso',     line:'observant and hands-on — you figure things out by touching them'},
-    ISFP: {tag:'the Adventurer',   line:'quietly expressive — you live through your senses and your aesthetic'},
-    ESTP: {tag:'the Entrepreneur', line:'fast-moving and present — you read the room and act on it'},
-    ESFP: {tag:'the Entertainer',  line:'warm and spontaneous — joy follows you into a room'}
+    INTJ: {tag:'the Architect',
+      line:'strategic and quietly visionary — you build systems only you fully see',
+      extra:'You plan in years, not weeks, and most of your best work is invisible. Others call it strategy; you call it obvious.'},
+    INTP: {tag:'the Logician',
+      line:'inventive and curious — you live for the elegant idea, the unsolved puzzle',
+      extra:'You\'d rather be right slowly than confident fast. Ideas are where you rest, not where you perform.'},
+    ENTJ: {tag:'the Commander',
+      line:'decisive and ambitious — you see the endgame and walk toward it',
+      extra:'You cut to what matters, and the room reorganises behind you. Momentum is your native language.'},
+    ENTP: {tag:'the Debater',
+      line:'playful and sharp — your mind sparks on connection and contradiction',
+      extra:'You think by talking, and good conversation is almost medicinal for you. You chase the interesting angle.'},
+    INFJ: {tag:'the Advocate',
+      line:'deeply empathic with a private inner world — you hold meaning in everything',
+      extra:'You feel the undercurrent before the surface moves, and you protect quiet — yours, and other people\'s. Things mean more around you.'},
+    INFP: {tag:'the Mediator',
+      line:'idealistic and gentle — you feel things in colour and look for beauty everywhere',
+      extra:'Your inner world is where you\'re most yourself. You don\'t just notice beauty — you steward it.'},
+    ENFJ: {tag:'the Protagonist',
+      line:'warm and inspiring — you read people closely and make them feel seen',
+      extra:'You know who people want to become, sometimes before they do. Your care is specific — you notice the right thing.'},
+    ENFP: {tag:'the Campaigner',
+      line:'bright and possibility-led — your enthusiasm moves other people too',
+      extra:'You see possibility faster than limitation, and it\'s contagious. The world gets more generous when you walk in.'},
+    ISTJ: {tag:'the Logistician',
+      line:'steady and trustworthy — the quiet kind of person who actually finishes things',
+      extra:'You keep the promises other people forgot they made. People build plans around your yes.'},
+    ISFJ: {tag:'the Defender',
+      line:'warm and attentive — the reason other people get to relax',
+      extra:'You remember the small things, and you protect other people\'s quiet. Care is your craft.'},
+    ESTJ: {tag:'the Executive',
+      line:'organised and grounded — you make the invisible structure that holds a room together',
+      extra:'Chaos softens around you. Things get done because you assumed they would.'},
+    ESFJ: {tag:'the Consul',
+      line:'generous and connected — you remember the small things that make people feel loved',
+      extra:'Your attention is specific and warm. People go home feeling taken care of and don\'t quite know why.'},
+    ISTP: {tag:'the Virtuoso',
+      line:'observant and hands-on — you figure things out by touching them',
+      extra:'You trust your own eyes before anyone\'s theory. Mastery, for you, is quiet and physical.'},
+    ISFP: {tag:'the Adventurer',
+      line:'quietly expressive — you live through your senses and your aesthetic',
+      extra:'You know what you like before you can explain it. Your taste is the language you write in.'},
+    ESTP: {tag:'the Entrepreneur',
+      line:'fast-moving and present — you read the room and act on it',
+      extra:'You\'re most alive where the stakes are real. You trust motion more than plans.'},
+    ESFP: {tag:'the Entertainer',
+      line:'warm and spontaneous — joy follows you into a room',
+      extra:'You feel with your whole body. People feel more alive around you — that\'s a gift, not an accident.'}
   },
   scent: {
     fire:  { name:'Bergamot & Orange Blossom', note:'bright, warming, citrus-floral',
@@ -2660,29 +2895,42 @@ var PERSONA = {
     air:   { N:{name:'Soft Lavender', hex:'#BFAED4'}, S:{name:'Clay Beige',   hex:'#C6B29A'} },
     water: { N:{name:'Pearl Blue',    hex:'#A5BBCF'}, S:{name:'Dusty Rose',   hex:'#C89098'} }
   },
-  // Tarot — 8 major-arcana archetypes. Each maps to an element (used in
-  // the reading AND as a fallback when zodiac is skipped). "numeral" is
-  // the classical Roman numeral of the card, printed on the card face.
+  // Tarot — 8 major-arcana archetypes. numeral = roman numeral printed on
+  // the card; tagline = short classical meaning; message = what it means
+  // that YOU drew THIS card today (extra reading sentence).
   tarot: {
-    moon:     {name:'The Moon',     numeral:'XVIII', tagline:'Intuition, mystery, dreams half-remembered', element:'water'},
-    sun:      {name:'The Sun',      numeral:'XIX',   tagline:'Joy, vitality, uncomplicated warmth',        element:'fire' },
-    star:     {name:'The Star',     numeral:'XVII',  tagline:'Hope, quiet clarity, something guiding',      element:'air'  },
-    empress:  {name:'The Empress',  numeral:'III',   tagline:'Abundance, softness, creation',               element:'earth'},
-    lovers:   {name:'The Lovers',   numeral:'VI',    tagline:'Connection, choice, the weight of being seen', element:'water'},
-    hermit:   {name:'The Hermit',   numeral:'IX',    tagline:'Solitude, reflection, inner knowing',          element:'earth'},
-    fool:     {name:'The Fool',     numeral:'0',     tagline:'Beginnings, the leap, trust in the path',      element:'air'  },
-    magician: {name:'The Magician', numeral:'I',     tagline:'Focus, making, bringing vision into form',     element:'fire' }
+    moon:     {name:'The Moon',     numeral:'XVIII', tagline:'intuition, mystery, dreams half-remembered', element:'water',
+               message:'You\'re not looking at the thing directly — you\'re sensing it. Trust that tonight; the subconscious is speaking.'},
+    sun:      {name:'The Sun',      numeral:'XIX',   tagline:'joy, vitality, uncomplicated warmth',        element:'fire',
+               message:'Warmth without conditions. Whatever you\'re holding can be simpler than you\'ve been making it.'},
+    star:     {name:'The Star',     numeral:'XVII',  tagline:'hope, quiet clarity, something guiding',     element:'air',
+               message:'A quiet signal from something larger. You\'re oriented, even if you can\'t see the whole path yet.'},
+    empress:  {name:'The Empress',  numeral:'III',   tagline:'abundance, softness, creation',              element:'earth',
+               message:'Something in you is ready to bloom. Don\'t rush it — bloom takes what it takes, and the garden knows.'},
+    lovers:   {name:'The Lovers',   numeral:'VI',    tagline:'connection, choice, the weight of being seen',element:'water',
+               message:'A choice is asking you to show up fully. This isn\'t about finding — it\'s about meeting.'},
+    hermit:   {name:'The Hermit',   numeral:'IX',    tagline:'solitude, reflection, inner knowing',         element:'earth',
+               message:'The answer is already inside, but only if you\'ll be still enough to hear it. Dim the lanterns around you.'},
+    fool:     {name:'The Fool',     numeral:'0',     tagline:'beginnings, the leap, trust in the path',    element:'air',
+               message:'The beginning has its own wisdom. Don\'t over-prepare — arrive. The path shapes itself under your feet.'},
+    magician: {name:'The Magician', numeral:'I',     tagline:'focus, making, bringing vision into form',    element:'fire',
+               message:'Your tools are already here. Pick them up. The making itself is the magic.'}
   },
-  // Symbol pick — pure intuition, no prior knowledge needed. Each symbol
-  // is an element anchor (works as the strongest fallback signal when
-  // everything else is skipped).
+  // Symbol pick — pure intuition. Each is an element anchor + an
+  // extra line about what that current means in your life right now.
   symbol: {
-    wave:    {name:'Wave',    tagline:'flow, depth, emotion',     element:'water'},
-    flame:   {name:'Flame',   tagline:'warmth, passion, presence',element:'fire' },
-    leaf:    {name:'Leaf',    tagline:'growth, grounding, patience',element:'earth'},
-    feather: {name:'Feather', tagline:'lightness, flight, thought',element:'air'  },
-    moon:    {name:'Moon',    tagline:'intuition, dreams, cycles', element:'water'},
-    star:    {name:'Star',    tagline:'hope, guidance, light',     element:'fire' }
+    wave:    {name:'Wave',    tagline:'flow, depth, emotion',     element:'water',
+              message:'You move what needs moving and soften what resists. Don\'t try to be the rock — be the tide.'},
+    flame:   {name:'Flame',   tagline:'warmth, passion, presence',element:'fire',
+              message:'Warmth is a responsibility and a gift. Burn where you\'re wanted; warm what you love.'},
+    leaf:    {name:'Leaf',    tagline:'growth, grounding, patience',element:'earth',
+              message:'You don\'t owe anyone a faster schedule. Photosynthesis takes its time, and so should you.'},
+    feather: {name:'Feather', tagline:'lightness, flight, thought',element:'air',
+              message:'Lightness isn\'t unseriousness — it\'s knowing what to put down. Travel light this season.'},
+    moon:    {name:'Moon',    tagline:'intuition, dreams, cycles', element:'water',
+              message:'Trust the cycles. What\'s hidden tonight will be revealed; what\'s bright now will also rest.'},
+    star:    {name:'Star',    tagline:'hope, guidance, light',     element:'fire',
+              message:'You\'re further away than you think, and someone is quietly steering by you. Keep shining; it lands.'}
   }
 };
 
@@ -2722,54 +2970,52 @@ function computeReading(S){
   // Build the reading as structured sections. Each section is {heading, body}.
   var sections = [];
 
-  // 1 — Zodiac
+  // 1 — Zodiac (archetype + traits + gift + tell = ~3 sentences)
   if(zInfo){
     sections.push({
       heading: 'Your ' + zInfo.name + ' heart',
-      body: 'As '+zInfo.name+', '+zInfo.archetype+', you are '+zInfo.traits+'.'
+      body: 'As '+zInfo.name+', '+zInfo.archetype+', you are '+zInfo.traits+'. '
+          + zInfo.gift + ' ' + zInfo.tell
     });
   }
 
-  // 2 — MBTI
+  // 2 — MBTI (tag + line + extra reading sentence)
   if(mInfo){
     sections.push({
       heading: 'As ' + S.mbti + ', ' + mInfo.tag,
-      body: 'You are '+mInfo.line+'.'
+      body: 'You are '+mInfo.line+'. ' + mInfo.extra
     });
   }
 
-  // 3 — Tarot card drawn
+  // 3 — Tarot card drawn (tagline + message about what drawing THIS card means)
   if(tInfo){
     sections.push({
       heading: tInfo.name + ' drew for you',
-      body: 'Card ' + tInfo.numeral + ' — '+tInfo.tagline.toLowerCase()+'. It weaves into everything we picked for you.'
+      body: 'Card ' + tInfo.numeral + ' — '+tInfo.tagline+'. ' + tInfo.message
     });
   }
 
-  // 4 — Symbol chosen
+  // 4 — Symbol chosen (meaning + current)
   if(yInfo){
     sections.push({
       heading: 'Your symbol — the ' + yInfo.name,
-      body: 'The '+yInfo.name.toLowerCase()+' means '+yInfo.tagline+'. That current runs through your box.'
+      body: 'The '+yInfo.name.toLowerCase()+' means '+yInfo.tagline+'. ' + yInfo.message
     });
   }
 
-  // 5 — Scent
+  // 5 — Scent / Tea / Colour: DO NOT reveal the actual notes in body text.
+  // These read as a "sealed" invitation; the printed card in the box reveals.
   sections.push({
     heading: 'Your scent',
-    body: 'We\'re tucking in a note of '+scent.note+' — '+scent.why+'.'
+    body: 'A scent has been chosen — drawn from everything above. Sealed until your box opens.'
   });
-
-  // 6 — Tea
   sections.push({
     heading: 'Your tea',
-    body: 'Yours is '+tea.note+' — '+tea.why+'.'
+    body: 'A tea to steep slowly, matched to your mood. Sealed for now.'
   });
-
-  // 7 — Colour
   sections.push({
     heading: 'Your colour',
-    body: 'A shade chosen just for you — wear it somewhere only you can see.'
+    body: 'A shade is yours this season. Wear it somewhere only you can see.'
   });
 
   // Closing flourish
