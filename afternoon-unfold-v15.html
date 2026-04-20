@@ -958,8 +958,9 @@ footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.
 .prize-float{position:fixed;right:22px;bottom:22px;z-index:320;width:72px;height:72px;border-radius:50%;background:rgba(245,235,228,0.72);border:1px solid rgba(185,79,99,0.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink);user-select:none;font-family:'Raleway',sans-serif;transition:transform 0.25s ease,background 0.25s ease,box-shadow 0.25s ease,border-color 0.25s ease;box-shadow:0 6px 18px -8px rgba(20,14,8,0.18);}
 .prize-float:hover,
 .prize-float:focus-visible{background:rgba(253,248,245,0.95);transform:scale(1.06);box-shadow:0 12px 28px -10px rgba(20,14,8,0.28);border-color:#B94F63;outline:none;}
-.prize-float .pf-icon{width:26px;height:26px;color:#B94F63;margin-bottom:4px;display:block;}
-.prize-float .pf-label{font-family:'Cormorant',serif;font-style:normal;font-weight:600;font-size:15px;color:#B94F63;line-height:1;letter-spacing:0.02em;}
+.prize-float .pf-icon{width:26px;height:26px;color:#B94F63;margin-bottom:4px;display:block;pointer-events:none;}
+.prize-float .pf-icon *{pointer-events:none;}
+.prize-float .pf-label{font-family:'Cormorant',serif;font-style:normal;font-weight:600;font-size:15px;color:#B94F63;line-height:1;letter-spacing:0.02em;pointer-events:none;}
 body.overlay-active .prize-float{display:none;}
 @media (max-width:640px){
   .prize-float{right:14px;bottom:14px;width:60px;height:60px;}
