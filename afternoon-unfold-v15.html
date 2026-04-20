@@ -1234,6 +1234,30 @@ body.overlay-active #main-nav{top:0;}
 #reserved-page .rp-back-btn{background:linear-gradient(90deg,#8E3A4E 0%,#B94F63 100%);color:#FDF8F5;font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;padding:14px 32px;border:none;border-radius:999px;cursor:pointer;transition:all 0.22s ease;box-shadow:0 4px 14px -4px rgba(185,79,99,0.4);}
 #reserved-page .rp-back-btn:hover{background:linear-gradient(90deg,#7A2E42 0%,#A0384F 100%);box-shadow:0 8px 22px -6px rgba(185,79,99,0.55);transform:translateY(-1px);}
 
+/* International waitlist modal — shown when a non-US zip is submitted */
+.intl-modal{display:none;position:fixed;inset:0;z-index:520;align-items:center;justify-content:center;background:rgba(20,14,8,0.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1.5rem;animation:pmFade 0.35s ease;}
+.intl-modal.open{display:flex;}
+.intl-modal-inner{background:var(--parchment);padding:2.25rem 2rem 2rem;max-width:460px;width:100%;position:relative;border:1px solid var(--border);box-shadow:0 30px 80px -25px rgba(20,14,8,0.5),0 8px 20px -8px rgba(20,14,8,0.2);text-align:center;max-height:calc(100vh - 3rem);overflow-y:auto;}
+.intl-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;color:var(--dust);cursor:pointer;line-height:1;width:34px;height:34px;padding:0;font-family:'Raleway',sans-serif;z-index:5;transition:color 0.2s;}
+.intl-modal-close:hover{color:var(--ink);}
+.intl-modal-eye{font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#B94F63;font-weight:600;margin-bottom:14px;}
+.intl-modal-h{font-family:'Cormorant',serif;font-size:clamp(1.6rem,2.9vw,2.1rem);font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:0.85rem;letter-spacing:-0.005em;}
+.intl-modal-h em{font-style:italic;color:#B94F63;}
+.intl-modal-sub{font-size:13.5px;color:var(--dust);line-height:1.65;margin-bottom:1.25rem;padding:0 0.25rem;}
+.intl-modal-inner #intl-form{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.intl-modal-inner #intl-form input[type="email"]{background:var(--white);border:1px solid var(--border);padding:12px 14px;font-family:'Raleway',sans-serif;font-size:13.5px;color:var(--ink);outline:none;transition:border-color 0.2s;letter-spacing:0.01em;}
+.intl-modal-inner #intl-form input[type="email"]:focus{border-color:#B94F63;box-shadow:0 0 0 3px rgba(185,79,99,0.12);}
+.intl-submit{background:linear-gradient(90deg,#8E3A4E 0%,#B94F63 100%);color:#FDF8F5;font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;padding:13px 22px;border:none;border-radius:999px;cursor:pointer;transition:all 0.22s ease;box-shadow:0 4px 14px -4px rgba(185,79,99,0.4);}
+.intl-submit:hover{background:linear-gradient(90deg,#7A2E42 0%,#A0384F 100%);box-shadow:0 8px 22px -6px rgba(185,79,99,0.55);transform:translateY(-1px);}
+.intl-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.intl-fine{font-size:11px;color:var(--dust);line-height:1.55;opacity:0.85;}
+#intl-success-state{padding:1rem 0 0.5rem;}
+.intl-success-icon{font-size:30px;color:var(--gold);margin-bottom:12px;line-height:1;}
+.intl-success-h{font-family:'Cormorant',serif;font-size:1.55rem;font-weight:500;color:var(--ink);margin-bottom:10px;}
+.intl-success-sub{font-size:13.5px;color:var(--dust);line-height:1.65;margin-bottom:1.5rem;padding:0 0.5rem;}
+.intl-success-btn{background:transparent;color:var(--ink);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:500;padding:12px 22px;border:1px solid var(--border);border-radius:999px;cursor:pointer;transition:all 0.2s;}
+.intl-success-btn:hover{border-color:#B94F63;color:#B94F63;}
+
 /* Pre-sale inactive / sold-out state */
 .ps-inactive-msg{text-align:center;padding:1.5rem 1rem;}
 .ps-inactive-msg .pi-icon{font-size:40px;color:#B94F63;margin-bottom:14px;}
@@ -2465,6 +2489,35 @@ function submitPromo(e,variant){
   </div>
 </div>
 
+<!-- ══════════════ INTERNATIONAL WAITLIST MODAL ══════════════ -->
+<!-- Opens when a reservation attempt has a non-US zip. Captures email for the
+     international-shipping launch instead of letting them complete a reservation
+     we can't fulfil. -->
+<div id="intl-modal" class="intl-modal" role="dialog" aria-labelledby="intl-modal-title">
+  <div class="intl-modal-inner">
+    <button class="intl-modal-close" type="button" onclick="closeIntlModal()" aria-label="Close">✕</button>
+
+    <div id="intl-form-state">
+      <div class="intl-modal-eye">✦ Round 1 · US only</div>
+      <h2 class="intl-modal-h" id="intl-modal-title">We're not shipping<br>to you <em>yet</em></h2>
+      <p class="intl-modal-sub">Round 1 ships within the US only. Drop your email and we'll be in touch when international shipping opens.</p>
+      <form id="intl-form" onsubmit="return submitIntlWaitlist(event)">
+        <input type="text" name="_gotcha" style="display:none !important;position:absolute;left:-9999px;" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="email" name="email" required placeholder="you@example.com" autocomplete="email">
+        <button type="submit" class="intl-submit">Keep me posted →</button>
+      </form>
+      <p class="intl-fine">We'll only email you when international shipping is ready. No spam, unsubscribe anytime.</p>
+    </div>
+
+    <div id="intl-success-state" style="display:none;">
+      <div class="intl-success-icon">✦</div>
+      <h3 class="intl-success-h">You're on the list.</h3>
+      <p class="intl-success-sub">We'll reach out the moment we open international shipping.</p>
+      <button type="button" class="intl-success-btn" onclick="closeIntlModal()">← Back to main page</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════ FULL-PAGE RESERVATION SUCCESS ══════════════ -->
 <div id="reserved-page">
   <div class="rp-inner">
@@ -3627,6 +3680,98 @@ function closeReservedPage(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+/* ════════════════════════════════════════════════
+   INTERNATIONAL WAITLIST MODAL
+   Opened from proceedToCheckout when the zip isn't US. Captures email
+   for the international-shipping launch. Also closes the reservation
+   modal underneath so the user isn't abandoned with two overlays open.
+════════════════════════════════════════════════ */
+function openIntlModal(){
+  var m = document.getElementById('intl-modal');
+  if(!m) return;
+  // Close reservation modal beneath so the international flow is the focus
+  var r = document.getElementById('reserve-modal');
+  if(r) r.classList.remove('open');
+  // Pre-fill with whatever email the user already typed in the reserve modal
+  var emailTyped = (document.getElementById('rsv-email') && document.getElementById('rsv-email').value || '').trim();
+  var intlEmail = m.querySelector('input[type="email"]');
+  if(intlEmail && emailTyped) intlEmail.value = emailTyped;
+  // Reset to form state (in case user opened it before)
+  document.getElementById('intl-form-state').style.display = '';
+  document.getElementById('intl-success-state').style.display = 'none';
+  var btn = m.querySelector('.intl-submit');
+  if(btn){ btn.disabled = false; btn.textContent = 'Keep me posted →'; }
+  m.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.body.classList.add('overlay-active');
+}
+function closeIntlModal(){
+  var m = document.getElementById('intl-modal');
+  if(!m) return;
+  m.classList.remove('open');
+  // Release body scroll if no other overlay still open
+  var quizOpen = document.getElementById('quiz-overlay') && document.getElementById('quiz-overlay').classList.contains('open');
+  var rOpen    = document.getElementById('reserve-modal') && document.getElementById('reserve-modal').classList.contains('open');
+  var wpOpen   = document.getElementById('welcome-popup') && document.getElementById('welcome-popup').classList.contains('open');
+  if(!quizOpen && !rOpen && !wpOpen){
+    document.body.style.overflow = '';
+    document.body.classList.remove('overlay-active');
+  }
+}
+function submitIntlWaitlist(e){
+  e.preventDefault();
+  var form = e.target;
+  var emailInput = form.querySelector('input[name="email"]');
+  var email = (emailInput && emailInput.value || '').trim();
+  var honeypot = form.querySelector('input[name="_gotcha"]');
+  if(honeypot && honeypot.value) return false;  // bot
+  if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    emailInput.focus(); emailInput.style.borderColor = '#B94F63';
+    return false;
+  }
+  var btn = form.querySelector('.intl-submit');
+  if(btn){ btn.disabled = true; btn.textContent = 'Adding you…'; }
+
+  var zip = (document.getElementById('rsv-zip') && document.getElementById('rsv-zip').value || '').trim();
+  var payload = {
+    _subject: 'International waitlist - ' + email,
+    _replyto: email,
+    _gotcha: '',
+    email: email,
+    source: 'intl-blocked-at-reservation',
+    zip_entered: zip,
+    quiz_name: (S && S.name) || '',
+    message: 'International waitlist signup.\nEmail: ' + email + '\nZip entered: ' + zip + '\nQuiz name: ' + ((S && S.name) || '(not given)')
+  };
+
+  fetch(FORMSPREE_ENDPOINT, {
+    method: 'POST',
+    headers: {'Accept':'application/json', 'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  }).then(function(r){
+    if(r.ok){
+      document.getElementById('intl-form-state').style.display = 'none';
+      document.getElementById('intl-success-state').style.display = '';
+    } else {
+      if(btn){ btn.disabled = false; btn.textContent = 'Keep me posted →'; }
+      alert('Something went wrong. Please try again or email hello@afternoon-unfold.com directly.');
+    }
+  }).catch(function(){
+    if(btn){ btn.disabled = false; btn.textContent = 'Keep me posted →'; }
+    alert('Network error. Please try again.');
+  });
+  return false;
+}
+/* Close intl-modal on backdrop / Esc */
+(function(){
+  var m = document.getElementById('intl-modal');
+  if(!m) return;
+  m.addEventListener('click', function(e){ if(e.target === m) closeIntlModal(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && m.classList.contains('open')) closeIntlModal();
+  });
+})();
+
 function submitWaitlist(form){
   var email = form.querySelector('input[name="email"]').value.trim();
   var btn = form.querySelector('button[type="submit"]');
@@ -3667,16 +3812,18 @@ function closeReserveModal(){
 /* Reservation-modal gift handlers (separate from quiz; gift now lives here in v14+) */
 /* US zip -> city/state lookup via zippopotam.us (free, no key).
    Runs 350ms after the 5th digit is typed, caches results, silently
-   falls back on network error. Detected state is stashed on
-   window._rsvUsState so proceedToCheckout can attach it to Formspree. */
+   falls back on network error. Sets window._rsvZipStatus to
+   'us' | 'not-us' | 'unknown' (used by proceedToCheckout to block
+   international submissions and open the waitlist modal instead). */
 (function(){
   var zipInput = document.getElementById('rsv-zip');
   var feedback = document.getElementById('rsv-zip-feedback');
   if(!zipInput || !feedback) return;
   var cache = {};
   var timer = null;
-  window._rsvUsState = '';
-  window._rsvUsCity  = '';
+  window._rsvUsState  = '';
+  window._rsvUsCity   = '';
+  window._rsvZipStatus = 'unknown';
 
   function render(info, isLoading){
     if(isLoading){
@@ -3687,13 +3834,15 @@ function closeReserveModal(){
     if(info && info.state){
       feedback.style.color = '#3A7E4E';   // soft green
       feedback.textContent = '✓ ' + info.city + ', ' + info.state;
-      window._rsvUsState = info.state;
-      window._rsvUsCity  = info.city;
+      window._rsvUsState  = info.state;
+      window._rsvUsCity   = info.city;
+      window._rsvZipStatus = 'us';
     } else {
       feedback.style.color = '#B94F63';   // rosewood
       feedback.textContent = '✕ Not a US zip — Round 1 is US-only';
-      window._rsvUsState = '';
-      window._rsvUsCity  = '';
+      window._rsvUsState  = '';
+      window._rsvUsCity   = '';
+      window._rsvZipStatus = 'not-us';
     }
   }
 
@@ -3720,8 +3869,9 @@ function closeReserveModal(){
     var digits = v.replace(/\D/g,'').slice(0,5);
     if(digits.length < 5){
       feedback.textContent = '';
-      window._rsvUsState = '';
-      window._rsvUsCity  = '';
+      window._rsvUsState  = '';
+      window._rsvUsCity   = '';
+      window._rsvZipStatus = 'unknown';
       return;
     }
     timer = setTimeout(function(){ lookup(digits); }, 350);
@@ -3788,7 +3938,16 @@ function proceedToCheckout(){
 
   /* Soft US detection — 5-digit zip */
   var isUS = /^\d{5}(-\d{4})?$/.test(zip);
-  var subjPrefix = isUS ? 'Founding 50 reservation' : 'Founding 50 international interest';
+
+  /* International block — Round 1 is US only. If the zip doesn't match
+     the US 5-digit pattern OR the zip-lookup confirmed it's not a US
+     zip, open the international waitlist instead of submitting. */
+  if(!isUS || window._rsvZipStatus === 'not-us'){
+    openIntlModal();
+    return;
+  }
+
+  var subjPrefix = 'Founding 50 reservation';
 
   /* Box number assignment (provisional — you manually finalize when packing) */
   var assignedBox = PRE_SALE_RESERVED + 1;   // visually optimistic; you update PRE_SALE_RESERVED daily
