@@ -2428,14 +2428,14 @@ function submitPromo(e,variant){
                   <div class="pr-card-value" id="pr-color">sealed</div>
                 </div>
               </div>
-              <p class="pr-seal-note">The specifics stay sealed — a hand-written card inside your box reveals all three.</p>
+              <p class="pr-seal-note">Your full reading — scent, tea &amp; colour — will be printed on a hand-written card inside your box. Open to reveal.</p>
               <div class="pr-closer" id="pr-closer">✦</div>
             </div>
             <!-- Fallback when no MBTI / zodiac was given -->
             <div class="persona-empty" id="persona-empty" style="display:none;">
               <div class="pe-eye">✦ Your reading</div>
               <p class="pe-text">You skipped the mystical questions — so we'll let your blind box be your reading.</p>
-              <p class="pe-sub">A hand-written card inside reveals a scent, a tea, and a colour chosen for your afternoon.</p>
+              <p class="pe-sub">A hand-written card printed inside your box will reveal a scent, a tea, and a colour chosen for your afternoon.</p>
             </div>
           </div>
 
@@ -2488,16 +2488,8 @@ function submitPromo(e,variant){
         </label>
 
         <div id="rsv-gift-fields" style="display:none;padding:14px;background:rgba(196,116,154,0.06);border:1px solid rgba(196,116,154,0.22);margin-bottom:10px;">
-          <p style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#B94F63;font-weight:500;margin:0 0 10px;">This gift is for…</p>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
-            <div class="qchip qchip-mini" onclick="pickRsvGiftFor('him',this)">Him</div>
-            <div class="qchip qchip-mini" onclick="pickRsvGiftFor('her',this)">Her</div>
-            <div class="qchip qchip-mini" onclick="pickRsvGiftFor('them',this)">Them</div>
-          </div>
-          <label class="reserve-label" for="rsv-gift-name">Their name</label>
-          <input type="text" id="rsv-gift-name" placeholder="e.g. Ella" autocomplete="off" oninput="onRsvGiftNameInput()" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:13px;color:var(--ink);margin-bottom:10px;outline:none;">
           <label class="reserve-label" for="rsv-gift-note">Handwritten note on the box (optional)</label>
-          <textarea id="rsv-gift-note" rows="2" placeholder="e.g. Happy birthday, Ella — something to slow your afternoons ✦" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:14px;color:var(--ink);margin-bottom:0;resize:none;outline:none;"></textarea>
+          <textarea id="rsv-gift-note" rows="2" placeholder="e.g. Happy birthday — something to slow your afternoons ✦" style="width:100%;background:var(--white);border:1px solid var(--border);padding:11px 13px;font-family:'Raleway',sans-serif;font-size:14px;color:var(--ink);margin-bottom:0;resize:none;outline:none;"></textarea>
         </div>
 
         <button type="submit" class="reserve-submit" id="reserve-submit-btn">Reserve my spot →</button>
@@ -3664,7 +3656,7 @@ function openReserveModal(){
     setText('rs-box-preview', (PRE_SALE_RESERVED + 1));
 
     /* Reset form */
-    ['rsv-email','rsv-zip','rsv-gift-name','rsv-gift-note'].forEach(function(id){
+    ['rsv-email','rsv-zip','rsv-gift-note'].forEach(function(id){
       var el = document.getElementById(id);
       if(el){ el.value=''; el.style.borderColor=''; }
     });
@@ -3676,7 +3668,6 @@ function openReserveModal(){
     /* Reset gift toggle + sub-fields */
     var giftCb = document.getElementById('rsv-is-gift');
     if(giftCb){ giftCb.checked = false; toggleGiftFields(); }
-    window._rsvGiftFor = '';
 
     var formState=document.getElementById('reserve-form-state');
     var successState=document.getElementById('reserve-success-state');
@@ -3921,20 +3912,9 @@ function toggleGiftFields(){
   var checked = document.getElementById('rsv-is-gift').checked;
   document.getElementById('rsv-gift-fields').style.display = checked ? '' : 'none';
   if(!checked){
-    // Clear gift data when unchecked
-    window._rsvGiftFor = '';
-    var nm=document.getElementById('rsv-gift-name'); if(nm) nm.value='';
-    var gn=document.getElementById('rsv-gift-note'); if(gn) gn.value='';
-    document.querySelectorAll('#rsv-gift-fields .qchip').forEach(c=>c.classList.remove('picked'));
+    // Clear the handwritten note when the toggle flips off
+    var gn = document.getElementById('rsv-gift-note'); if(gn) gn.value='';
   }
-}
-function pickRsvGiftFor(who,el){
-  window._rsvGiftFor = who;
-  document.querySelectorAll('#rsv-gift-fields .qchip').forEach(c=>c.classList.remove('picked'));
-  el.classList.add('picked');
-}
-function onRsvGiftNameInput(){
-  // no-op — we read value at submit time
 }
 
 /* v14 — PRE-SALE RESERVATION (no Stripe, just Formspree + box number + success state) */
@@ -3954,10 +3934,9 @@ function proceedToCheckout(){
   var zip = (zipInput.value||'').trim();
   var notes = '';   // reservation-level notes field removed; gift note covers this when needed
 
-  /* Gift data (only if the gift checkbox is ticked) */
+  /* Gift data — Q1 now captures the recipient's name, so we only need
+     the optional handwritten note here */
   var isGift = !!document.getElementById('rsv-is-gift').checked;
-  var giftFor = isGift ? (window._rsvGiftFor || '') : '';
-  var giftName = isGift ? ((document.getElementById('rsv-gift-name').value||'').trim()) : '';
   var giftNote = isGift ? ((document.getElementById('rsv-gift-note').value||'').trim()) : '';
 
   /* Honeypot: if a bot fills the hidden _gotcha field, silently "succeed" (don't submit) */
@@ -4019,8 +3998,7 @@ function proceedToCheckout(){
     '',
     'Quiz name: ' + (o.customerQuizName || '(same as reservation name)'),
     '',
-    'GIFT? ' + (isGift ? 'YES' : 'no'),
-    (isGift ? 'Gift for: ' + (giftFor || '—') + ' (' + (giftName || '—') + ')' : ''),
+    'GIFT? ' + (isGift ? 'YES (recipient name = Quiz name above)' : 'no'),
     (isGift ? 'Handwritten note: ' + (giftNote || '(none requested)') : ''),
     '',
     'Retail: ' + fmtPrice(o.retailPrice),
@@ -4066,8 +4044,6 @@ function proceedToCheckout(){
     reading_color: (o.reading && o.reading.color) ? o.reading.color.name : '',
     reading_text: o.reading ? o.reading.readingText : '',
     is_gift: isGift ? 'yes' : 'no',
-    gift_for: giftFor,
-    gift_recipient_name: giftName,
     gift_note: giftNote,
     quiz_name: o.customerQuizName,
     quiz_notes: o.quizNotes,
