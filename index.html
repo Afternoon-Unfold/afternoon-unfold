@@ -2109,7 +2109,7 @@ function submitPromo(e,variant){
     <div class="quiz-slide active" id="slide-0">
       <div class="quiz-slide-inner"><div class="quiz-inner">
         <div class="quiz-counter" id="s0-counter">01 — 08</div>
-        <h2 class="quiz-q">Hello! <span class="qhi-pink">What's this magical box for?</span></h2>
+        <h2 class="quiz-q">Hello! <span class="qhi-pink">Who's this magical box for?</span></h2>
         <p class="quiz-sub">Every blind box is curated around one person — we'll ask about them next.</p>
         <div id="whofor-chips" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:420px;margin:1.5rem auto 0;">
           <div class="qchip" onclick="pickWhoFor('self',this)">Myself</div>
@@ -3050,10 +3050,14 @@ function restartQuiz(){
   });
   /* Reset any name-interpolated UI so the next quiz starts fresh */
   document.querySelectorAll('.quiz-name-inline').forEach(function(el){ el.textContent=''; });
-  var s1q = document.getElementById('s1-q');
-  if(s1q) s1q.innerHTML = 'What\'s <span class="qhi-pink">your name?</span>';
   /* Clear result page name slots too */
   document.querySelectorAll('.result-name').forEach(function(el){ el.textContent=''; });
+  /* Roll all personalized copy back to defaults based on the empty state */
+  if(typeof refreshPersonalization === 'function') refreshPersonalization();
+  /* Also invalidate typewriter caches so the new text animates when revisited */
+  ['s1-q','s4-q','s5-q','s6-q','s7-q'].forEach(function(id){
+    var el = document.getElementById(id); if(el) delete el.dataset.twOrig;
+  });
   setQuizBg('default');
   setProgress(0);
   goToSlide(0);
@@ -3141,17 +3145,14 @@ function pickWhoFor(who, el){
   document.querySelectorAll('#whofor-chips .qchip').forEach(c=>c.classList.remove('picked'));
   el.classList.add('picked');
   document.getElementById('btn-0').disabled = false;
-  // Update S1 question text to match
-  var s1q = document.getElementById('s1-q');
-  if(s1q){
-    s1q.innerHTML = (who === 'self')
-      ? 'What\'s <span class="qhi-pink">your name?</span>'
-      : 'What\'s <span class="qhi-pink">his/her/their name?</span>';
-  }
-  var nameInput = document.getElementById('input-name');
-  if(nameInput){
-    nameInput.placeholder = (who === 'self') ? 'Your name' : 'Their name';
-  }
+  // Re-sync all personalization: S1 heading, input placeholder, Q4–Q7 copy.
+  // Also invalidates any typewriter animation cached for downstream slides so
+  // changing the choice and going back+forward shows the right copy.
+  refreshPersonalization();
+  ['s1-q','s4-q','s5-q','s6-q','s7-q'].forEach(function(id){
+    var el = document.getElementById(id); if(el) delete el.dataset.twOrig;
+  });
+  [1,4,5,6,7].forEach(function(i){ delete twDone[i]; });
 }
 
 // S1 — Name
@@ -3161,46 +3162,78 @@ function onNameInput(){
   S.name = v;
   document.getElementById('btn-1').disabled = !v;
   document.querySelectorAll('.quiz-name-inline').forEach(function(el){ el.textContent = v ? titleCaseName(v) : ''; });
+  refreshPersonalization();
+  ['s4-q','s5-q','s6-q','s7-q'].forEach(function(id){
+    var el = document.getElementById(id); if(el) delete el.dataset.twOrig;
+  });
+  [4,5,6,7].forEach(function(i){ delete twDone[i]; });
+}
 
-  /* Personalize Q5–Q7 copy using the recipient's name.
-     When empty, fall back to the original "Your" wording. */
-  var poss = possessiveName(v);              // "Ella’s" or "Your"
-  var tName = titleCaseName(v);              // "Ella" or ""
-  var forName = tName ? (' for ' + tName) : '';
+/* Single source of truth for copy interpolation.
+   Rules:
+     - forWhom === 'self'  → always use "your / you" (even though we know the name;
+                             addressing the BUYER in second person reads warmer)
+     - forWhom === 'other' → use the recipient's name possessively
+     - Empty (no pick yet) → default "Your" wording
+   Called from pickWhoFor() AND onNameInput(). */
+function refreshPersonalization(){
+  var v = (S && S.name) || '';
+  var tName = titleCaseName(v);
+  var isOther = (S.forWhom === 'other');
+  // Possessive token used in headings: "Ella's" or "Your"
+  var poss = isOther && tName ? (tName + '\u2019s') : 'Your';
+  // Lowercase form for inline use: "Ella's" or "your"
+  var possLower = isOther && tName ? (tName + '\u2019s') : 'your';
+  // "for Ella" suffix (only for tarot when gifting)
+  var forName = isOther && tName ? (' for ' + tName) : ' for you';
 
-  // Q4 — style / palette
+  // S1 — Name heading (depends only on forWhom)
+  var s1q = document.getElementById('s1-q');
+  if(s1q){
+    s1q.innerHTML = isOther
+      ? 'What\'s <span class="qhi-pink">his/her/their name?</span>'
+      : 'What\'s <span class="qhi-pink">your name?</span>';
+  }
+  var nameInput = document.getElementById('input-name');
+  if(nameInput){
+    nameInput.placeholder = isOther ? 'Their name' : 'Your name';
+  }
+
+  // Q4 — palette
   var s4q = document.getElementById('s4-q');
   if(s4q) s4q.innerHTML = poss + ' <span class="qhi-purple">style</span> preferences';
   var s4sub = document.getElementById('s4-sub');
-  if(s4sub) s4sub.textContent = 'This helps us personalise the colours of ' + (tName ? (tName + '\u2019s') : 'your') + ' blind box.';
+  if(s4sub) s4sub.textContent = 'This helps us personalise the colours of ' + possLower + ' blind box.';
   var s4label = document.getElementById('s4-color-label');
   if(s4label) s4label.innerHTML = '🎨 Favourite colour palette';
 
   // Q5 — personality / MBTI
   var s5tag = document.getElementById('s5-tag');
-  if(s5tag) s5tag.textContent = 'Optional · let the magic read ' + (tName ? (tName + '\u2019s') : 'your') + ' chart';
+  if(s5tag) s5tag.textContent = 'Optional · let the magic read ' + possLower + ' chart';
   var s5q = document.getElementById('s5-q');
   if(s5q) s5q.innerHTML = poss + ' <span class="qhi-pink">personality</span>';
   var s5sub = document.getElementById('s5-sub');
-  if(s5sub) s5sub.textContent = tName
+  if(s5sub) s5sub.textContent = (isOther && tName)
     ? ('Share what you know about ' + tName + ' and magic will read ' + tName + '\u2019s chart — we\u2019ll choose the scent, tea, and luck colour from the clues you leave.')
-    : 'Share what you know and magic will read your chart — we\u2019ll choose the scent, tea, and luck colour from the clues you leave.';
+    : 'Share what you know and magic will read your chart — we\u2019ll choose your scent, tea, and luck colour from the clues you leave.';
   var s5mbti = document.getElementById('s5-mbti-label');
   if(s5mbti) s5mbti.innerHTML = poss + ' MBTI <span class="quiz-optional-hint">— if you know it</span>';
 
   // Q6 — zodiac
   var s6tag = document.getElementById('s6-tag');
-  if(s6tag) s6tag.textContent = tName ? (tName + '\u2019s sign anchors the reading') : 'Optional · your sign anchors the reading';
+  if(s6tag) s6tag.textContent = (isOther && tName)
+    ? (tName + '\u2019s sign anchors the reading')
+    : 'Optional · your sign anchors the reading';
   var s6q = document.getElementById('s6-q');
   if(s6q) s6q.innerHTML = poss + ' <span class="qhi-pink">zodiac</span> sign';
   var s6sub = document.getElementById('s6-sub');
-  if(s6sub) s6sub.textContent = tName
-    ? ('Their element guides everything we tuck into the box — their scent, their tea, their colour. Share if you know it.')
+  if(s6sub) s6sub.textContent = (isOther && tName)
+    ? 'Their element guides everything we tuck into the box — their scent, their tea, their colour. Share if you know it.'
     : 'Your element guides everything we tuck into your box — your scent, your tea, your colour. Share if you know it.';
 
-  // Q7 — tarot
+  // Q7 — tarot (only shown for self, but keep copy tidy anyway)
   var s7tag = document.getElementById('s7-tag');
-  if(s7tag) s7tag.textContent = tName ? ('the deck has drawn one for ' + tName) : 'Optional · the deck has drawn one for you';
+  if(s7tag) s7tag.textContent = 'Optional · the deck has drawn one' + forName;
   var s7q = document.getElementById('s7-q');
   if(s7q) s7q.innerHTML = 'Pick the <span class="qhi-pink">card</span> that calls' + forName;
 }
