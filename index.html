@@ -297,6 +297,14 @@ section{min-height:100vh;padding-top:58px;}
 .qchip.qchip-mini{font-size:12.5px;padding:10px 10px;letter-spacing:0.04em;text-align:center;color:var(--ink);}
 
 /* ── Tarot card grid (Q7) ── */
+/* Tarot slide has a longer heading ("Pick the card that calls") and a
+   wider grid — give its inner container more breathing room so the heading
+   never wraps at common desktop sizes. */
+#slide-7 .quiz-inner{max-width:780px;}
+#slide-7 .quiz-q{white-space:nowrap;}
+@media (max-width:720px){
+  #slide-7 .quiz-q{white-space:normal;}
+}
 .tarot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:720px;margin:1.25rem auto 0;}
 .tarot-card{position:relative;background:linear-gradient(165deg,#FBF4EA 0%,#F5EBE0 55%,#EDDECC 100%);border:1px solid rgba(196,147,106,0.55);padding:10px 6px 10px;cursor:pointer;transition:transform 0.25s cubic-bezier(0.2,0.9,0.2,1),box-shadow 0.25s ease,border-color 0.25s ease;text-align:center;color:#8A6034;overflow:hidden;min-height:138px;}
 .tarot-card::before{content:'';position:absolute;top:5px;left:5px;right:5px;bottom:5px;border:1px solid rgba(196,147,106,0.32);pointer-events:none;transition:border-color 0.25s ease;}
