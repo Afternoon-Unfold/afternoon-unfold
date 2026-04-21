@@ -39,18 +39,18 @@ body{font-family:'Raleway',sans-serif;font-weight:400;background:var(--white);ov
 .butterfly-trail.active{opacity:0.5;}
 .butterfly-trail svg{width:100%;height:100%;animation:bfFlap 1.1s ease-in-out infinite alternate;}
 /* NAV */
-#main-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,250,246,0.6);border-bottom:1px solid rgba(224,207,200,0.3);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;}
-.nav-logo{font-family:'Cormorant',serif;font-size:20px;font-weight:600;color:var(--ink);letter-spacing:0.06em;line-height:1.15;}
-.nav-links{display:flex;gap:2.5rem;}
-.nav-link{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dust);cursor:pointer;text-decoration:none;font-weight:500;transition:color 0.2s;}
+#main-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(253,250,246,0.6);border-bottom:1px solid rgba(224,207,200,0.3);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
+.nav-logo{font-family:'Cormorant',serif;font-size:16px;font-weight:600;color:var(--ink);letter-spacing:0.06em;line-height:1.15;}
+.nav-links{display:flex;gap:1.75rem;}
+.nav-link{font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dust);cursor:pointer;text-decoration:none;font-weight:500;transition:color 0.2s;}
 .nav-link:hover{color:var(--ink);}
-.nav-cta{background:linear-gradient(90deg,#8E3A4E 0%,#B94F63 100%);color:#FDF8F5;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:10px 22px;border:none;border-radius:999px;cursor:pointer;font-weight:600;transition:all 0.22s ease;box-shadow:0 2px 8px -2px rgba(185,79,99,0.3);}
+.nav-cta{background:linear-gradient(90deg,#8E3A4E 0%,#B94F63 100%);color:#FDF8F5;font-family:'Raleway',sans-serif;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;padding:8px 16px;border:none;border-radius:999px;cursor:pointer;font-weight:600;transition:all 0.22s ease;box-shadow:0 2px 8px -2px rgba(185,79,99,0.3);}
 .nav-cta:hover{background:linear-gradient(90deg,#7A2E42 0%,#A0384F 100%);box-shadow:0 6px 16px -4px rgba(185,79,99,0.5);transform:translateY(-1px);}
 .nav-cta:hover{background:#3A2E24;}
-section{min-height:100vh;padding-top:58px;}
+section{min-height:100vh;padding-top:50px;}
 /* COVER */
 /* ── COVER SPLIT LAYOUT ── */
-#cover{min-height:100vh;padding-top:58px;position:relative;overflow:hidden;display:flex;align-items:stretch;}
+#cover{min-height:100vh;padding-top:50px;position:relative;overflow:hidden;display:flex;align-items:stretch;}
 .cover-left{flex:0 0 58%;position:relative;overflow:hidden;min-height:calc(100vh - 58px);}
 .cover-left video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
 .cover-right{flex:1;background:#FAF6F1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:5rem 3.5rem 4rem 3rem;position:relative;overflow:hidden;}
@@ -516,8 +516,8 @@ footer{background:var(--parchment);border-top:1px solid var(--border);padding:2.
 }
 
 /* ── NAV LOGO — ZARA STYLE ── */
-.nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none;cursor:pointer;}
-.nav-logo-img{height:36px;width:36px;border-radius:50%;object-fit:cover;flex-shrink:0;display:block;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;}
+.nav-logo-img{height:28px;width:28px;border-radius:50%;object-fit:cover;flex-shrink:0;display:block;}
 .nav-logo-text{display:flex;flex-direction:column;gap:0;}
 .nav-logo-au{font-family:'Cormorant',serif;font-size:18px;font-weight:700;color:var(--ink);letter-spacing:0.28em;text-transform:uppercase;line-height:1;display:block;}
 .nav-logo-name{font-family:'Cormorant',serif;font-size:11px;font-weight:600;color:var(--ink);letter-spacing:0.32em;text-transform:uppercase;line-height:1.2;display:block;margin-top:2px;}
@@ -1552,7 +1552,10 @@ function submitWelcomeNotify(form){
    actually visible. This guarantees they start when scrolled to. */
 (function(){
   if(typeof IntersectionObserver === 'undefined') return;
-  var videos = document.querySelectorAll('video[autoplay]');
+  // Exclude the quiz background video — openQuiz()/closeQuiz() handle its
+  // play/pause explicitly, and IntersectionObserver on a fixed overlay
+  // element has flaky visibility semantics across browsers.
+  var videos = document.querySelectorAll('video[autoplay]:not(#quiz-video-bg):not(#loading-video)');
   if(!videos.length) return;
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
@@ -1572,7 +1575,7 @@ function submitWelcomeNotify(form){
 <nav id="main-nav">
   <a class="nav-logo" href="#cover">
     <img src="logo.png" class="nav-logo-img" alt="Afternoon Unfold">
-    <div><span style="display:block;line-height:1.1;font-family:'Cormorant',serif;font-size:20px;font-weight:600;color:var(--ink);letter-spacing:0.06em;">Afternoon Unfold</span><span style="display:block;font-size:9px;font-weight:400;letter-spacing:0.22em;color:var(--dust);text-transform:uppercase;margin-top:1px;">DIY CRAFT BLIND BOX</span></div>
+    <div><span style="display:block;line-height:1.1;font-family:'Cormorant',serif;font-size:15px;font-weight:600;color:var(--ink);letter-spacing:0.06em;">Afternoon Unfold</span><span style="display:block;font-size:8px;font-weight:400;letter-spacing:0.22em;color:var(--dust);text-transform:uppercase;margin-top:1px;">DIY CRAFT BLIND BOX</span></div>
   </a>
   <div class="nav-links">
     <a class="nav-link" href="#belief">Our Belief</a>
@@ -2997,8 +3000,22 @@ function openQuiz(){
   document.getElementById('quiz-overlay').classList.add('open');
   document.body.style.overflow='hidden';
   document.body.classList.add('overlay-active');
+  /* Wave background: load() forces the browser to re-initialise the source
+     (important when the overlay was display:none on first paint), then play().
+     Retry once after 250ms in case the first play() fires before the display
+     transition has fully applied. */
   var wv=document.getElementById('quiz-video-bg');
-  if(wv){try{wv.currentTime=0;var p=wv.play();if(p&&p.catch)p.catch(function(){});}catch(e){}}
+  if(wv){
+    try {
+      wv.load();
+      wv.currentTime = 0;
+      var p = wv.play();
+      if(p && p.catch) p.catch(function(){});
+    } catch(e){}
+    setTimeout(function(){
+      if(wv.paused){ try { wv.play().catch(function(){}); } catch(e){} }
+    }, 250);
+  }
   setProgress(0);
   goToSlide(0);
 }
