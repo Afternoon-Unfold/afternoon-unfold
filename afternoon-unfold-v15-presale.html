@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Afternoon Unfold — Coming Soon</title>
+<title>Afternoon Unfold — Founding 50 · Pre-Sale</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1360,29 +1360,36 @@ body.overlay-active #main-nav{top:0;}
 <body class="has-banner">
 
 <!-- ══════════════ ROUND 1 STICKY BANNER (simplified · clickable) ══════════════ -->
-<div class="presale-banner" id="presale-banner" onclick="openWelcomePopup()">
-  <span class="ps-eye">✦ Coming soon</span>
+<div class="presale-banner" id="presale-banner" onclick="openQuiz()">
+  <span class="ps-eye">✦ Round 1</span>
   <span class="ps-dia">·</span>
-  <span id="ps-banner-detail">Something magical is brewing</span>
+  <span id="ps-banner-detail">50 blind boxes · Opens May 1</span>
   <span class="ps-dia">·</span>
-  <span class="ps-action">Join the list →</span>
+  <span class="ps-action">Reserve now →</span>
 </div>
 
 <!-- ══════════════ WELCOME POPUP — shows 2s after landing ══════════════ -->
 <div id="welcome-popup" class="welcome-popup" role="dialog" aria-labelledby="wp-title">
   <div class="wp-card">
     <button class="wp-close" type="button" onclick="closeWelcomePopup()" aria-label="Close">✕</button>
-    <div class="wp-eye">✦ Something magical is coming ✦</div>
-    <h2 class="wp-h" id="wp-title">We're dropping<br><span>soon.</span></h2>
-    <p class="wp-sub">Afternoon Unfold — a <strong style="color:#B94F63;">DIY Craft Blind Box</strong>, curated just for you. Drop your email and you'll be the first to know when we open the doors.</p>
+    <div class="wp-eye">✦ Limited Drop · Round 1 ✦</div>
+    <h2 class="wp-h" id="wp-title">Be one of<br>the <span>first 50.</span></h2>
+    <p class="wp-sub">The <strong style="color:#B94F63;">Founding 50</strong> — our Round 1 drop of 50 one-of-a-kind DIY Craft Blind Boxes. Each uniquely curated from your quiz, numbered, signed.</p>
     <p class="wp-accent">No two alike in the world.</p>
+    <div class="wp-stats">
+      <div class="wp-stat"><div class="wp-stat-num" id="wp-stat-count">50 of 50</div><div class="wp-stat-lbl">boxes available</div></div>
+      <div class="wp-stat"><div class="wp-stat-num" id="wp-stat-date">May 1</div><div class="wp-stat-lbl" id="wp-stat-date-lbl">Round 1 opens</div></div>
+      <div class="wp-stat"><div class="wp-stat-num">July 4</div><div class="wp-stat-lbl">shipping begins · US</div></div>
+    </div>
     <div class="wp-ctas">
+      <button class="wp-cta-primary" type="button" onclick="closeWelcomePopup();openQuiz();">Reserve your box now →</button>
+      <div class="wp-divider">— or —</div>
       <form class="wp-notify" onsubmit="event.preventDefault();submitWelcomeNotify(this);return false;">
-        <input type="email" name="email" required placeholder="you@example.com" autocomplete="email">
-        <button type="submit">Join the list →</button>
+        <input type="email" name="email" required placeholder="Notify me when Round 1 opens" autocomplete="email">
+        <button type="submit">Notify →</button>
       </form>
     </div>
-    <p class="wp-fine">We'll email the moment we're live. No spam, ever.</p>
+    <p class="wp-fine">Reservations are free. <strong>15% off</strong> with <code style="background:rgba(185,79,99,0.12);padding:1px 5px;border-radius:3px;font-family:inherit;color:#B94F63;font-weight:600;">UNFOLD15</code> on July 4 launch. US shipping only.</p>
   </div>
 </div>
 
@@ -1463,8 +1470,10 @@ function tickFlipCount(el, targetLeft, total){
 }
 
 function openWelcomePopup(){
-  /* Coming-soon mode: popup is the primary email-capture entry.
-     Stats / date blocks are disabled below (no wp-stats in DOM). */
+  /* Disabled during Round 1 pre-sale — the 15% is auto-applied via the
+     reservation flow, so a separate email-capture popup is redundant.
+     Remove this `return;` to re-enable later. */
+  return;
   /* Update live stats with flip-tick count-up */
   if(typeof PRE_SALE_RESERVED !== 'undefined'){
     var left = PRE_SALE_TOTAL - PRE_SALE_RESERVED;
@@ -1520,11 +1529,12 @@ function submitWelcomeNotify(form){
     method:'POST',
     headers:{'Accept':'application/json','Content-Type':'application/json'},
     body:JSON.stringify({
-      _subject: 'Coming-soon waitlist - ' + email,
+      _subject: 'Round 1 early-waitlist - ' + email,
       _replyto: email,
       email: email,
-      source: 'coming-soon-landing',
-      message: 'Coming-soon waitlist signup:\nEmail: ' + email
+      source: 'welcome-popup-notify',
+      state_when_signed_up: (typeof getPreSaleState==='function' ? getPreSaleState() : 'unknown'),
+      message: 'Early-waitlist signup (notify me when Round 1 opens):\nEmail: ' + email + '\nState at signup: ' + (typeof getPreSaleState==='function' ? getPreSaleState() : 'unknown')
     })
   }).then(function(r){
     if(r.ok){
@@ -1596,7 +1606,7 @@ function submitWelcomeNotify(form){
     <a class="nav-link" href="#reviews">Reviews</a>
     <a class="nav-link" href="#questions">FAQ</a>
   </div>
-  <button class="nav-cta" onclick="openWelcomePopup()">Join the list</button>
+  <button class="nav-cta" onclick="openQuiz()">Reserve my spot</button>
 </nav>
 
 <!-- COVER -->
@@ -1617,8 +1627,8 @@ function submitWelcomeNotify(form){
       <li class="cover-craft-item" onclick="document.getElementById('cp-sy').scrollIntoView({behavior:'smooth'})">Paint by Numbers<span class="ci-arrow">→</span></li>
       <li class="cover-craft-item" onclick="document.getElementById('cp-fp').scrollIntoView({behavior:'smooth'})">Floral Pen Pot<span class="ci-arrow">→</span></li>
     </ul>
-    <div class="founding-badge"><span class="fb-dot"></span> Dropping soon · Limited launch ahead</div>
-    <button class="btn-dark" onclick="openWelcomePopup()">Join the waitlist &rarr;</button>
+    <div class="founding-badge"><span class="fb-dot"></span> Round 1 · Limited · 50 blind boxes</div>
+    <button class="btn-dark" onclick="openQuiz()">Reserve my spot (free) &rarr;</button>
   </div>
 </section>
 
@@ -1721,10 +1731,10 @@ function submitWelcomeNotify(form){
     <span style="font-family:'Cormorant',serif;font-size:1.5rem;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:0.65rem;">Browse our FAQ <span class="faq-chev" style="display:inline-block;width:11px;height:11px;border-right:1.5px solid var(--dust);border-bottom:1.5px solid var(--dust);transform:rotate(45deg);transition:transform 0.3s ease;margin-bottom:4px;"></span></span>
   </div>
   <div class="faq-wrap" id="faq-wrap" style="max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height 0.45s ease,opacity 0.35s ease,margin-top 0.3s ease;">
-    <div class="faq-item open"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">When are you launching?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">We're putting the final touches on our first drop. Join the waitlist and we'll email you the moment the doors open, with early access before the public launch.</div></div></div>
-    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What's inside a blind box?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">A DIY craft you'll love (Perler Beads, Chenille Sticks, Paint-by-Numbers, or a Floral Pen Pot), plus hand-picked extras and a surprise add-on curated just for you.</div></div></div>
+    <div class="faq-item open"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">How long does delivery take?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">We're in our Round 1 reservation stage — our Founding 50 boxes ship July 4, 2026, US only. Once shipping opens, please allow 5–10 business days from dispatch.</div></div></div>
     <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">Are the blind boxes suitable for complete beginners?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Absolutely. Every blind box includes a printed step-by-step guide plus QR code video tutorials. No prior experience needed.</div></div></div>
     <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What is the mystery add-on?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Every blind box includes a hand-picked extra based on your answers and the scene you're creating. Always a surprise until you open the box.</div></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">What's the Founder's Prize?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Every Founding 50 member is automatically entered into a draw for a premium, hand-curated prize — kept under wraps until July 4. Reserving your box is your entry. One winner drawn on launch day (July 4) when the first 50 boxes ship. Announced via email and Instagram.</div></div></div>
     <div class="faq-item"><div class="faq-q" onclick="togFaq(this)"><span class="faq-qt">Can I send a blind box as a gift?</span><div class="faq-ic"></div></div><div class="faq-a"><div class="faq-ai">Yes. Every blind box arrives in a beautiful presentation box. You can leave a handwritten note while placing your order.</div></div></div>
   </div>
   </div>
@@ -1920,7 +1930,7 @@ function submitPromo(e,variant){
 
 <!-- Floating Founder's Prize — translucent round button with a gift-box
      line icon in rosewood. Click opens the prize detail modal. -->
-<div class="prize-float" id="prize-float" onclick="openPrizeModal()" role="button" tabindex="0" aria-label="View Founder's Prize" style="display:none;">
+<div class="prize-float" id="prize-float" onclick="openPrizeModal()" role="button" tabindex="0" aria-label="View Founder's Prize">
   <svg class="pf-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <!-- Box body -->
     <rect x="5" y="13.5" width="22" height="15.5"/>
@@ -2978,12 +2988,6 @@ function fmtPrice(price){
    OPEN / CLOSE / RESTART
 ════════════════════════════════════════════════ */
 function openQuiz(){
-  /* COMING-SOON MODE: redirect any quiz entry point to the waitlist popup.
-     To re-enable the full quiz flow, remove the next 4 lines. */
-  if(typeof openWelcomePopup === 'function'){
-    openWelcomePopup();
-    return;
-  }
   delete twDone[0];
   document.getElementById('quiz-overlay').classList.add('open');
   document.body.style.overflow='hidden';
@@ -3590,9 +3594,6 @@ function _formatCountdown(ms){
 
 /* Render simplified banner + live counter */
 function renderPreSaleBanner(){
-  /* COMING-SOON MODE: banner content is static HTML, no dynamic updates.
-     To re-enable pre-sale banner, remove this early return. */
-  return;
   var state = getPreSaleState();
   var left = Math.max(0, PRE_SALE_TOTAL - PRE_SALE_RESERVED);
   var now = Date.now();
