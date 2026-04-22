@@ -40,3 +40,10 @@ sy-atmo3.jpg
 sy-atmo4.jpg
 sy-atmo5.jpg
 product\ in\ motion\ video.zip
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
