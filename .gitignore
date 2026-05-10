@@ -47,3 +47,6 @@ product\ in\ motion\ video.zip
 !.dev.vars.example
 .env*
 !.env.example
+
+# build output
+dist/
