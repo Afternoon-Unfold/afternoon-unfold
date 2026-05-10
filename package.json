@@ -2,7 +2,7 @@
   "name": "afternoon-unfold",
   "version": "1.0.0",
   "private": true,
-  "devDependencies": {
-    "wrangler": "^4.90.0"
+  "scripts": {
+    "build": "echo 'Static site - no build needed'"
   }
 }
