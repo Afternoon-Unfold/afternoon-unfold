@@ -5091,7 +5091,13 @@ function renderPreSaleBanner(){
   } else if(state === 'active'){
     var endT = new Date(PRE_SALE_END).getTime();
     var diff = Math.max(0, endT - now);
-    detail = 'Limited · ' + left + ' of 50 blind boxes left · Closes in ' + _formatCountdown(diff);
+    /* Surface the running count only once boxes have actually been reserved —
+       "50 of 50 left" on launch morning reads as zero traction. */
+    if(left < PRE_SALE_TOTAL){
+      detail = 'Limited · ' + left + ' of 50 blind boxes left · Closes in ' + _formatCountdown(diff);
+    } else {
+      detail = 'Round 1 open · Limited 50 blind boxes · Closes in ' + _formatCountdown(diff);
+    }
   } else { // softopen
     var startT = new Date(PRE_SALE_START).getTime();
     var diffS = Math.max(0, startT - now);
