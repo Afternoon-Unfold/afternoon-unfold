@@ -282,13 +282,12 @@
 <!-- ───── CONTROL PANEL ───── -->
 <div class="control no-print">
   <h1>Reading cards — batch print</h1>
-  <p>Paste a JSON array below — one entry per customer, each renders as one A4 page. Click <strong>Render</strong>, then <strong>Cmd+P</strong> (or Ctrl+P) to print/save-as-PDF — A4, no margins.</p>
+  <p>Paste in one or more Formspree emails (or a JSON array). Each submission renders as one A4 page. Click <strong>Render</strong>, then <strong>Cmd+P</strong> (or Ctrl+P) to print/save-as-PDF — A4, no margins.</p>
   <p style="font-size:12px;">
-    <strong>Easy mode (paste from Formspree fields):</strong> <code>name</code>, <code>readingText</code>, <code>scent</code>, <code>tea</code>, <code>colour</code>, <code>colourHex</code>, <code>boxNumber</code> — all simple strings. Aliases accepted: <code>customer_name</code>, <code>full_reading</code>, <code>reading_text</code>, <code>color</code>, <code>color_hex</code>.<br>
-    <strong>Optional but recommended for nicer headings:</strong> <code>mbti</code> (e.g. "ISFJ" → heading becomes "As ISFJ, the Defender"), <code>zodiac</code> ("aquarius" → "Your Aquarius heart"), <code>todaysTarot</code> ("The Moon"), <code>date</code> ("May 1" or an ISO timestamp; defaults to today).<br>
-    <strong>Full mode (new orders, post-deploy):</strong> paste the <code>reading_full_json</code> value from each Formspree row, wrapped as an array of strings <code>[ "json...", "json..." ]</code>. The tool unpacks each one and uses the structured sections / today's-tarot / etc.
+    <strong>Fastest workflow:</strong> open each PAID-order email, select-all (<code>Cmd+A</code>), paste here. Paste several in sequence and they'll all parse into separate cards. The tool detects <code>customer_name</code>, <code>full_reading</code>, <code>scent</code>, <code>tea</code>, <code>colour</code>, <code>todays_tarot</code>, <code>todays_element</code>, and the order timestamp automatically.<br>
+    <strong>Power-user JSON mode:</strong> paste a JSON array of objects with keys <code>name</code>, <code>readingText</code>, <code>scent</code>, <code>tea</code>, <code>colour</code>, <code>colourHex</code>, <code>mbti</code>, <code>zodiac</code>, <code>todaysTarot</code>, <code>date</code>. Useful when you want to override specific fields.
   </p>
-  <textarea id="json-input" placeholder='[{"name":"Zora","scent":{"name":"White Musk"},"tea":{"name":"Rose"},"color":{"name":"Rose","hex":"#E5B5C0"},"todaysTarot":{"name":"The Star","numeral":"XVII","message":"A quiet signal from something larger."},"sections":[{"heading":"Your Pisces heart","body":"As Pisces, the dreamer, you are gentle and intuitive."}],"closer":"✦"}]'></textarea>
+  <textarea id="json-input" placeholder='Paste Formspree emails here — one or many. Or a JSON array.'></textarea>
   <div class="control-row">
     <button class="btn" id="btn-render">Render cards</button>
     <button class="btn btn-ghost" id="btn-sample">Load sample</button>
@@ -524,20 +523,153 @@ function renderCard(r){
 }
 
 /* ────────────────────────────────────────────────────────
-   Input parsing
+   Input parsing — auto-detects JSON vs Formspree-email text
 ──────────────────────────────────────────────────────── */
+
+/* Element → colour-hex lookup (matches PERSONA.color on the main site). */
+var ELEMENT_HEX = {
+  water: '#E5B5C0',  /* Rose */
+  fire:  '#E5996B',  /* Coral */
+  earth: '#8FA284',  /* Sage */
+  air:   '#A5BBCF'   /* Sky */
+};
+var COLOUR_HEX = {
+  rose:  '#E5B5C0',
+  coral: '#E5996B',
+  sage:  '#8FA284',
+  sky:   '#A5BBCF'
+};
+
+/* Format an ISO timestamp ("2026-05-11T13:09:48.778Z") as "May 11". */
+function _formatTimestamp(ts){
+  if(!ts) return '';
+  var d = new Date(ts);
+  if(isNaN(d.getTime())) return '';
+  var months = ['January','February','March','April','May','June','July',
+                'August','September','October','November','December'];
+  return months[d.getMonth()] + ' ' + d.getDate();
+}
+
+/* Extract a Formspree field's value from a raw email block.
+   Format is consistent: "<field_name>\n\n<value>\n\n<next_field_name>...". */
+function _grabField(block, field){
+  /* Formspree email format puts each field on its own line, then a blank line,
+     then the value on the next line(s). The value ends when the next known
+     field name appears on its own line. Example:
+         customer_name
+                                    ← blank
+         a
+         craft                      ← next field begins here
+                                    ← blank
+         Punch Needle
+     So we want: <field>\n+ (capture) up to \n<known-field>\n. */
+  var FIELDS = '(?:customer_name|craft|scene|palette|mbti|zodiac|tarot_drawn|' +
+               'symbol|adjectives|todays_tarot|todays_element|scent|tea|' +
+               'colour|color|full_reading|notes|message|_subject|_status|' +
+               '_format|_replyto|_gotcha|_next)';
+  var re = new RegExp(
+    '(?:^|\\n)' + field + '[ \\t]*\\n+([\\s\\S]*?)' +
+    '(?=\\n[ \\t]*' + FIELDS + '[ \\t]*\\n|$)',
+    'i'
+  );
+  var m = block.match(re);
+  if(!m) return '';
+  /* Skip the leading blank line(s) the email format inserts before the value. */
+  return m[1].replace(/^[ \t\n]+/, '').replace(/[ \t\n]+$/, '');
+}
+
+/* Pull a colour hex out of the message body, e.g. "Colour: Rose (#E5B5C0)". */
+function _grabHexFromMessage(block){
+  var m = block.match(/#([0-9A-Fa-f]{6})/);
+  return m ? '#' + m[1].toUpperCase() : '';
+}
+
+/* Parse one Formspree submission block into a row object the renderer expects. */
+function parseFormspreeBlock(block){
+  var name        = _grabField(block, 'customer_name');
+  var fullReading = _grabField(block, 'full_reading');
+  if(!name && !fullReading) return null;  /* not a real submission block */
+
+  var scent   = _grabField(block, 'scent');
+  var tea     = _grabField(block, 'tea');
+  var colour  = _grabField(block, 'colour') || _grabField(block, 'color');
+  var tarot   = _grabField(block, 'todays_tarot');
+  var element = _grabField(block, 'todays_element').toLowerCase();
+  var mbti    = _grabField(block, 'mbti');
+  var zodiac  = _grabField(block, 'zodiac');
+
+  /* Colour hex: try message body first, then derive from element / colour name. */
+  var hex = _grabHexFromMessage(block);
+  if(!hex && element && ELEMENT_HEX[element]) hex = ELEMENT_HEX[element];
+  if(!hex && colour && COLOUR_HEX[colour.toLowerCase()]) hex = COLOUR_HEX[colour.toLowerCase()];
+
+  /* Pull order timestamp from the message body for the daily-tarot heading. */
+  var tsMatch = block.match(/Order timestamp:\s*([0-9T:.\-Z]+)/i);
+  var date = tsMatch ? _formatTimestamp(tsMatch[1]) : '';
+
+  /* Title-case the name ("a" → "A"). */
+  if(name) name = name.charAt(0).toUpperCase() + name.slice(1);
+
+  return {
+    name: name || 'friend',
+    mbti: mbti || '',
+    zodiac: zodiac || '',
+    todaysTarot: tarot || '',
+    date: date,
+    readingText: fullReading || '',
+    scent: scent || '',
+    tea: tea || '',
+    colour: colour || '',
+    colourHex: hex || ''
+  };
+}
+
+/* Detect whether the input looks like one or more Formspree emails (vs JSON).
+   Heuristic: contains either the "New form submission" header, the
+   "═══ PAID/PENDING ORDER ═══" message banner, or the flat-field
+   `customer_name\n\n<value>` line that every Formspree email carries. */
+function _looksLikeFormspree(text){
+  return /New form submission|═══.*ORDER\s*═══|(^|\n)customer_name[ \t]*\n/i.test(text);
+}
+
+/* Split a multi-email paste into individual submission blocks. Each email
+   starts with "New form submission on Afternoon Unfold" so we use that
+   as the divider. Falls back to the message-banner if header is missing. */
+function _splitFormspreeBlocks(text){
+  /* Split on the email header so each block represents one submission. */
+  if(/New form submission/i.test(text)){
+    return text.split(/(?=New form submission)/i).filter(function(b){ return b.trim(); });
+  }
+  /* Fallback: split on the PAID/PENDING ORDER banner. */
+  if(/═══.*ORDER\s*═══/.test(text)){
+    return text.split(/(?=═══\s*(?:PAID|PENDING)\s*ORDER)/i).filter(function(b){ return b.trim(); });
+  }
+  /* Single block. */
+  return [text];
+}
+
 function parseInput(raw){
   raw = (raw || '').trim();
-  if(!raw) throw new Error('Paste a JSON array first.');
-  /* If they pasted a single object, wrap it in an array. */
+  if(!raw) throw new Error('Paste a JSON array or one or more Formspree emails.');
+
+  /* Auto-detect Formspree-email format. */
+  if(_looksLikeFormspree(raw)){
+    var blocks = _splitFormspreeBlocks(raw);
+    var rows = blocks.map(parseFormspreeBlock).filter(Boolean);
+    if(!rows.length){
+      throw new Error('Could not find any submission data in the pasted email(s).');
+    }
+    return rows;
+  }
+
+  /* Otherwise, treat as JSON. */
   var parsed;
   try { parsed = JSON.parse(raw); }
-  catch(e){ throw new Error('Could not parse JSON: ' + e.message); }
+  catch(e){ throw new Error('Could not parse — paste a Formspree email or JSON array. (' + e.message + ')'); }
   if(!Array.isArray(parsed)){
     if(parsed && typeof parsed === 'object'){ parsed = [parsed]; }
     else { throw new Error('Expected a JSON array of reading objects.'); }
   }
-  /* If any entry is a STRING (e.g. one row's reading_full_json), parse it. */
   return parsed.map(function(row){
     if(typeof row === 'string'){
       try { return JSON.parse(row); }
