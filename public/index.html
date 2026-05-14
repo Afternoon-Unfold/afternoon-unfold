@@ -3046,10 +3046,77 @@ function _handlePostPayment(){
     console.warn('[post-payment] handler failed', e);
   }
 }
+
+/* Counterpart to _handlePostPayment. If the customer left for Stripe (we
+   saved au_pending_order at button-click) but returned to the site WITHOUT
+   ?paid=1 after enough time has passed that they should've completed
+   checkout, surface a banner asking what happened. Stripe doesn't redirect
+   on failure, so this is the only signal we get that a checkout was
+   abandoned or failed.
+
+   Time gates:
+   - < 60s elapsed: customer is probably still mid-checkout — don't interrupt
+   - 60s to 6h:     show the banner — likely abandoned or failed
+   - > 6h:          stale (browser kept the localStorage around) — clean up
+                    silently and don't pester */
+function _handleAbandonedCheckout(){
+  try {
+    var params = new URLSearchParams(window.location.search);
+    if(params.get('paid') === '1') return; // success case, _handlePostPayment owns it
+
+    var orderStr = localStorage.getItem('au_pending_order');
+    if(!orderStr) return;
+
+    var order = null;
+    try { order = JSON.parse(orderStr); } catch(e){ return; }
+    if(!order || !order.ts) return;
+
+    var elapsed = Date.now() - order.ts;
+    if(elapsed < 60000) return;
+    if(elapsed > 6 * 60 * 60 * 1000){
+      try { localStorage.removeItem('au_pending_order'); } catch(e){}
+      return;
+    }
+
+    _showAbandonedCheckoutBanner(order);
+  } catch(e){
+    console.warn('[abandoned-checkout] handler failed', e);
+  }
+}
+
+function _showAbandonedCheckoutBanner(order){
+  var banner = document.getElementById('checkout-followup-banner');
+  if(!banner) return;
+  var craftSpan = document.getElementById('checkout-followup-craft');
+  if(craftSpan){
+    craftSpan.textContent = (order && order.craftName) ? order.craftName : 'your checkout';
+  }
+  var retryLink = document.getElementById('checkout-followup-retry');
+  if(retryLink){
+    if(order && order.craftId && typeof STRIPE_LINKS !== 'undefined' && STRIPE_LINKS[order.craftId]){
+      retryLink.href = _stripeUrl(STRIPE_LINKS[order.craftId]);
+      retryLink.style.display = '';
+    } else {
+      retryLink.style.display = 'none';
+    }
+  }
+  banner.style.display = 'block';
+}
+
+function _dismissAbandonedCheckoutBanner(clearPending){
+  var banner = document.getElementById('checkout-followup-banner');
+  if(banner) banner.style.display = 'none';
+  if(clearPending){
+    try { localStorage.removeItem('au_pending_order'); } catch(e){}
+  }
+}
+
 if(document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', _handlePostPayment);
+  document.addEventListener('DOMContentLoaded', _handleAbandonedCheckout);
 } else {
   _handlePostPayment();
+  _handleAbandonedCheckout();
 }
 
 function openPromo(){
@@ -3607,8 +3674,8 @@ function submitPromo(e,variant){
               <button class="btn-cart" id="btn-cart">Proceed to checkout</button>
               <button class="btn-restart" onclick="restartQuiz()">Start over</button>
             </div>
-            <p class="checkout-tip" style="font-size:11px;color:#8A6A60;line-height:1.65;margin-top:14px;text-align:center;letter-spacing:0.01em;max-width:340px;margin-left:auto;margin-right:auto;">
-              At checkout, the <strong style="color:#8E3A4E;">Card</strong> option is most reliable — Amazon Pay &amp; Link only work with US accounts. If your payment fails or sends you back here, retry with Card, or DM <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener" style="color:#B94F63;font-weight:600;text-decoration:none;">@afternoonunfold</a> and we'll help.
+            <p class="checkout-tip" style="font-size:11px;color:#8A6A60;line-height:1.65;margin-top:14px;text-align:center;letter-spacing:0.01em;max-width:360px;margin-left:auto;margin-right:auto;">
+              After paying, you'll get a Stripe receipt email within 2 min — that's your confirmation. <strong style="color:#8E3A4E;">No email?</strong> Payment didn't go through — retry with the <strong style="color:#8E3A4E;">Card</strong> option, or DM <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener" style="color:#B94F63;font-weight:600;text-decoration:none;">@afternoonunfold</a>.
             </p>
           </div>
 
@@ -3739,7 +3806,7 @@ function submitPromo(e,variant){
       <div class="reserve-success-icon">✦</div>
       <h2 class="reserve-h" style="text-align:center;">Taking you to checkout…</h2>
       <p style="text-align:center;">If nothing happens after a few seconds, <a id="rsv-fallback-link" href="#" style="color:#B94F63;font-weight:600;">click here</a>.</p>
-      <p style="text-align:center;font-size:11.5px;color:var(--dust);margin-top:14px;line-height:1.6;">If checkout fails, use the <strong style="color:var(--ink);">Card</strong> option (not Amazon Pay). Stuck? DM <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener" style="color:#B94F63;font-weight:600;">@afternoonunfold</a>.</p>
+      <p style="text-align:center;font-size:11.5px;color:var(--dust);margin-top:14px;line-height:1.6;">Confirmation = thank-you page or Stripe receipt email. No confirmation = retry with the <strong style="color:var(--ink);">Card</strong> option, or DM <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener" style="color:#B94F63;font-weight:600;">@afternoonunfold</a>.</p>
     </div>
   </div>
 </div>
@@ -3843,6 +3910,23 @@ function submitPromo(e,variant){
 
       <button class="ty-back-btn" type="button" onclick="closeThankYouPage()">Back to home</button>
     </div>
+  </div>
+</div>
+
+<!-- ══════════════ ABANDONED / FAILED CHECKOUT BANNER ══════════════
+     Shown by _handleAbandonedCheckout() when the customer returns to the
+     site WITHOUT ?paid=1 but with a pending au_pending_order in
+     localStorage. Stripe doesn't redirect on failure, so this banner is
+     the only way we can tell the customer their checkout didn't complete. -->
+<div id="checkout-followup-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:545;background:#FBF4E6;border-bottom:1px solid rgba(165,127,69,0.28);box-shadow:0 4px 14px -4px rgba(60,40,20,0.18);padding:14px 20px;font-family:'Raleway',sans-serif;">
+  <div style="max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+    <span style="font-size:18px;line-height:1;color:#A57F45;flex-shrink:0;">✦</span>
+    <p style="flex:1;min-width:220px;margin:0;font-size:13px;color:#3A2410;line-height:1.55;">
+      We didn't see a confirmation for <strong id="checkout-followup-craft" style="color:#8E3A4E;">your checkout</strong>. If your payment went through, you'll get a Stripe receipt email within 2 minutes. If not, your payment didn't process — retry below.
+    </p>
+    <a id="checkout-followup-retry" href="#" style="font-size:11px;color:#B94F63;font-weight:600;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(185,79,99,0.35);border-radius:3px;">Retry checkout</a>
+    <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener" style="font-size:11px;color:#8A6A60;font-weight:500;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;padding:8px 14px;">DM us</a>
+    <button type="button" onclick="_dismissAbandonedCheckoutBanner(true)" aria-label="Dismiss" style="background:none;border:none;color:#8A6A60;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0;">×</button>
   </div>
 </div>
 
