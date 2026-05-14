@@ -5128,13 +5128,12 @@ var STRIPE_LINKS = {
   sy: 'https://buy.stripe.com/7sYaEXdRle9L53Yg274Vy02',  // Paint by Nums $47
   dp: 'https://buy.stripe.com/28E4gz5kP5Df1RM2bh4Vy01'   // Diamond       $48
 };
-/* TESTING ONLY — auto-applies a 90%-off coupon at checkout so Zora can test the
-   end-to-end flow without paying full processing fees. Set to '' to disable. */
-var STRIPE_TEST_PROMO_CODE = 'YRTMBS97';
+/* Auto-applies PRE_SALE_CODE (UNFOLD15) at Stripe checkout via the prefilled_promo_code
+   URL param. Returns the link unchanged if PRE_SALE_CODE is empty. */
 function _stripeUrl(link){
   if(!link) return link;
-  if(!STRIPE_TEST_PROMO_CODE) return link;
-  return link + (link.indexOf('?') === -1 ? '?' : '&') + 'prefilled_promo_code=' + encodeURIComponent(STRIPE_TEST_PROMO_CODE);
+  if(!PRE_SALE_CODE) return link;
+  return link + (link.indexOf('?') === -1 ? '?' : '&') + 'prefilled_promo_code=' + encodeURIComponent(PRE_SALE_CODE);
 }
 var FORMSPREE_ENDPOINT = 'https://formspree.io/f/xaqaoebr';
 
