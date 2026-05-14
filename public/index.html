@@ -3918,14 +3918,13 @@ function submitPromo(e,variant){
      site WITHOUT ?paid=1 but with a pending au_pending_order in
      localStorage. Stripe doesn't redirect on failure, so this banner is
      the only way we can tell the customer their checkout didn't complete. -->
-<div id="checkout-followup-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:545;background:#FBF4E6;border-bottom:1px solid rgba(165,127,69,0.28);box-shadow:0 4px 14px -4px rgba(60,40,20,0.18);padding:14px 20px;font-family:'Raleway',sans-serif;">
+<div id="checkout-followup-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:545;background:#FBF4E6;border-bottom:2px solid #B94F63;box-shadow:0 4px 14px -4px rgba(60,40,20,0.18);padding:14px 20px;font-family:'Raleway',sans-serif;">
   <div style="max-width:760px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-    <span style="font-size:18px;line-height:1;color:#A57F45;flex-shrink:0;">✦</span>
-    <p style="flex:1;min-width:220px;margin:0;font-size:13px;color:#3A2410;line-height:1.55;">
-      We didn't see a confirmation for <strong id="checkout-followup-craft" style="color:#8E3A4E;">your checkout</strong>. If your payment went through, you'll get a Stripe receipt email within 2 minutes. If not, your payment didn't process — retry below.
+    <span style="font-size:16px;line-height:1;color:#B94F63;flex-shrink:0;font-weight:700;">✕</span>
+    <p style="flex:1;min-width:200px;margin:0;font-size:14px;color:#3A2410;line-height:1.5;">
+      <strong style="color:#8E3A4E;">Payment failed.</strong> Your checkout for <strong id="checkout-followup-craft">your box</strong> didn't go through.
     </p>
-    <a id="checkout-followup-retry" href="#" style="font-size:11px;color:#B94F63;font-weight:600;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(185,79,99,0.35);border-radius:3px;">Retry checkout</a>
-    <a href="https://www.instagram.com/afternoonunfold" target="_blank" rel="noopener" style="font-size:11px;color:#8A6A60;font-weight:500;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;padding:8px 14px;">DM us</a>
+    <a id="checkout-followup-retry" href="#" style="font-size:11px;color:#FDF8F5;font-weight:600;text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;padding:9px 16px;background:#B94F63;border-radius:3px;">Retry</a>
     <button type="button" onclick="_dismissAbandonedCheckoutBanner(true)" aria-label="Dismiss" style="background:none;border:none;color:#8A6A60;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0;">×</button>
   </div>
 </div>
